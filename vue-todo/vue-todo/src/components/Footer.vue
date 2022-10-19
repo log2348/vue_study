@@ -8,10 +8,9 @@
       @click="showModal = true"
     >
       일괄 수정</button
-    >&nbsp;&nbsp;
-    <button class="btn btn-light">
-      <router-link to="/detail">이동</router-link>
-    </button>
+    >&nbsp;&nbsp;<router-link to="/detail">
+      <button class="btn btn-light">이동</button></router-link
+    >
     <br /><br />
     <button class="btn btn-outline-secondary">항목 JSON 반환</button
     >&nbsp;&nbsp;

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Header :list="list"></Header>
-    <List :list="list"></List>
+    <Header :list="list" @appendRow="appendRow"></Header>
+    <List :list="list" @deleteRow="deleteRow" @updateRow="updateRow"></List>
     <Footer :list="list"></Footer>
   </div>
 </template>
@@ -50,10 +50,39 @@ export default {
     };
   },
   methods: {
-    updateRow(id) {
-      alert("수정 이벤트 발생" + id);
+    // 추가
+    appendRow(rowId, date, contents) {
+      if (date == "") {
+        alert("날짜를 입력하세요.");
+        return;
+      }
+
+      if (contents == "") {
+        alert("내용을 입력하세요.");
+        return;
+      }
+
+      let objTodo = {
+        rowId: rowId + 1,
+        date: date,
+        contents: contents,
+        complete: "N",
+      };
+
+      this.list.push(objTodo);
+
+      document.getElementById("date").value = "";
+      document.getElementById("contents").value = "";
     },
-    
+    // 수정
+    updateRow(iRowId, strNewContent) {
+      alert("수정이벤트 발생");
+      document.getElementById("content-" + iRowId).textContent = strNewContent;
+    },
+    // 단건 삭제
+    deleteRow(id) {
+      this.list = this.list.filter((a) => a.rowId != id);
+    },
   },
   components: {
     Header,

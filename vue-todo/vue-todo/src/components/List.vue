@@ -26,8 +26,8 @@
             <input
               type="checkbox"
               name="checkRow"
-                class="check_all_list"
-                @click="checkAllList(event)"
+              class="check_all_list"
+              @click="checkAllList(event)"
             />
           </th>
           <td>{{ item.date }}</td>
@@ -48,68 +48,28 @@
               @click="deleteRow(item.rowId)"
               >삭제</span
             >&nbsp;&nbsp;
-            <span style="color: blue; cursor: pointer"> 수정 </span>
+            <span style="color: blue; cursor: pointer" @click="updateRow()">
+              수정
+            </span>
           </td>
         </tr>
       </tbody>
     </table>
-    <button id="show-modal" @click="showModal = true">Show Modal</button>
 
-    <Teleport to="body">
-      <modal :show="showModal" @close="showModal = false">
-        <template #header>
-          <h3>custom header</h3>
-        </template>
-      </modal>
-    </Teleport>
-    <Popup :show="show"></Popup>
   </div>
 </template>
 
 <script>
-import Popup from "./Popup.vue";
 export default {
   showModal: false,
+  openPopup: false,
   props: ["list"],
   methods: {
-    // CheckBox
-    allCheck(e) {
-      if (e.target.checked) {
-        document.querySelectorAll(".check_all_list").forEach(function (v) {
-          v.checked = true;
-        });
-      } else {
-        document.querySelectorAll(".check_all_list").forEach(function (v) {
-          v.checked = false;
-        });
-      }
-    },
-
-    checkAllList() {
-      let checkCount = 0;
-      document.querySelectorAll(".check_all_list").forEach(function (v) {
-        if (v.checked === false) {
-          checkCount++;
-        }
-      });
-
-      if (checkCount > 0) {
-        document.getElementById("allCheck").checked = false;
-      } else if (checkCount === 0) {
-        document.getElementById("allCheck").checked = true;
-      }
-    },
-    // 삭제
-    deleteRow(id) {
-      this.list = this.list.filter((a) => a.rowId != id);
-    },
+    
     // 다중 삭제
-    deleteSelectedAll() {
-      
-    },
+    deleteSelectedAll() {},
   },
   components: {
-    Popup,
   },
 };
 </script>

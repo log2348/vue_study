@@ -67,26 +67,11 @@ export default {
     },
     // 추가
     appendRow() {
-      if (document.getElementById("date").value == "") {
-        alert("날짜를 입력하세요.");
-        return;
-      }
+      let rowId = document.getElementById("table-body").childElementCount + 1;
+      let date = document.getElementById("date").value;
+      let contents = document.getElementById("contents").value;
 
-      if (document.getElementById("contents").value == "") {
-        alert("내용을 입력하세요.");
-        return;
-      }
-
-      let objTodo = {
-        rowId: document.getElementById("table-body").childElementCount + 1,
-        date: document.getElementById("date").value,
-        contents: document.getElementById("contents").value,
-        complete: "N",
-      };
-      this.list.push(objTodo);
-
-      document.getElementById("date").value = "";
-      document.getElementById("contents").value = "";
+      this.$emit("appendRow", rowId, date, contents);
     },
   },
 };
