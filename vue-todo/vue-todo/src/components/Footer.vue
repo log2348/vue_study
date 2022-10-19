@@ -11,7 +11,7 @@
       <button class="btn btn-light">이동</button></router-link
     >
     <br /><br />
-    <button class="btn btn-outline-secondary" @click="getData()">항목 JSON 반환</button
+    <button class="btn btn-outline-secondary" @click="getJsonData()">항목 JSON 반환</button
     >&nbsp;&nbsp;
     <button class="btn btn-outline-secondary">항목 불러오기</button>&nbsp;&nbsp;
     <button class="btn btn-outline-secondary" @click="initData()">
@@ -39,6 +39,9 @@ export default {
     deleteSelectedData(selected) {
       selected = this.selected;
       this.$emit("deleteSelectedData", selected);
+    },
+    getJsonData() {
+      this.$emit("getJsonData");
     }
   },
 };

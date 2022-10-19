@@ -6,12 +6,14 @@
       @deleteRow="deleteRow"
       @updateRow="updateRow"
       @selectItem="selectItem"
+      @checkComplete="checkComplete"
     ></List>
     <Footer
       :list="list"
       :selected="selected"
       @getData="getData"
       @deleteSelectedData="deleteSelectedData"
+      @getJsonData="getJsonData"
     ></Footer>
   </div>
 </template>
@@ -100,7 +102,9 @@ export default {
       });
     },
     // 항목 JSON 형식 반환
-    getData() {},
+    getJsonData() {
+      alert(JSON.stringify(this.list));
+    },
     selectItem(selected) {
       this.selected = selected;
     },

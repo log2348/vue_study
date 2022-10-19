@@ -38,9 +38,15 @@
               type="checkbox"
               v-if="item.complete == 'Y'"
               v-model="completed"
+              @click="checkComplete(item.rowId)"
               checked
             />
-            <input :id="'complete-' + item.rowId" type="checkbox" v-else />
+            <input
+              :id="'complete-' + item.rowId"
+              type="checkbox"
+              @click="checkComplete(item.rowId)"
+              v-else
+            />
           </td>
           <td></td>
           <td>
@@ -53,7 +59,8 @@
               style="color: blue; background-color: white; cursor: pointer"
               v-b-modal.modal-1
               @click="clickUpdateBtn(item.rowId)"
-              >수정</span>
+              >수정</span
+            >
           </td>
         </tr>
       </tbody>
@@ -74,8 +81,7 @@ import Popup from "../components/Popup.vue";
 export default {
   data() {
     return {
-      selectedId: 0,
-      contents: document.getElementById("contents-" + this.selectedId).textContent,
+      selectedId: "",
       selected: [],
       allChecked: false,
     };
@@ -90,12 +96,9 @@ export default {
       this.$emit("selectItem", this.selected);
     },
     // 단건 수정 버튼 클릭
-    clickUpdateBtn(id) {
-      this.selectedId = id;
-      alert(this.selectedId);
-
+    clickUpdateBtn() {
+      // this.selectedId = id;
       // let strContent = document.getElementById("contents-" + id).textContent;
-
       // document.getElementById("update-btn").style.display = "block";
       // document.getElementById("update-all-btn").style.display = "none";
       // document.getElementById("before-update-text").value = strContent;
@@ -107,6 +110,21 @@ export default {
     showModal(txtBefore) {
       alert(txtBefore.textContent);
       txtBefore.disabled = true;
+    },
+  },
+  // 완료여부 체크에 따른 행 색상 세팅
+  checkComplete(id) {
+    let objTodo = this.list.find((a) => a.rowId == id);
+    let checkbox = document.getElementById("complete-" + id);
+    let targetRow = document.getElementById("complete-" + id).parentElement
+      .parentElement;
+
+    if (!objTodo.completeState) {
+      targetRow.style.background = "";
+      checkbox.removeAttribute("checked");
+    } else {
+      targetRow.style.background = "pink";
+      checkbox.setAttribute("checked", "");
     }
   },
   components: {

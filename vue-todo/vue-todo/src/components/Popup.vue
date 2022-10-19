@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       txtBefore: document.getElementById("before-update-text"),
-      
     }
   },
   props: ["selectedId", "contents"],

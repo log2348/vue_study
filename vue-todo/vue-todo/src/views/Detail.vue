@@ -9,7 +9,7 @@
       </thead>
 
       <tbody id="table-body">
-        <tr align="center" v-for="item in this.completed" :key="item.rowId">
+        <tr align="center" v-for="item in this.list" :key="item.rowId">
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
         </tr>
