@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-modal id="modal-1" title="내용 수정">
+    <b-modal id="modal-1" title="내용 수정" @show="showModal()">
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="before-update-text" />
+        <input type="text" id="before-update-text" :value="contents" />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
@@ -18,6 +18,7 @@
           type="button"
           class="btn btn-primary"
           id="update-btn"
+          @click="clickUpdateBtn()"
         >
           수정
         </button>
@@ -38,69 +39,37 @@
 export default {
   data() {
     return {
-      methods: {
-        // 단건 수정
-        updateRow() {
-          let iRowId = document.getElementById("table-id").value;
-          let strNewContent =
-            document.getElementById("after-update-text").value;
+      txtBefore: document.getElementById("before-update-text"),
+      
+    }
+  },
+  props: ["selectedId", "contents"],
+  methods: {
+    clickUpdateBtn(id) {
+      let strContent = document.getElementById("contents-" + id).textContent;
 
-          if (strNewContent == "") {
-            alert("수정하실 문자열을 입력하세요.");
-            return;
-          }
+      document.getElementById("update-btn").style.display = "block";
+      document.getElementById("update-all-btn").style.display = "none";
+      document.getElementById("before-update-text").value = strContent;
+      document.getElementById("before-update-text").disabled = true;
 
-          // 모달창 닫기
-          document.getElementById("close-update-modal").click();
-          this.$emit("updateRow", iRowId, strNewContent);
-        },
-        // 삭제
-        deleteRow(id) {
-          this.$emit("deleteRow", id);
-        },
-        // 일괄 수정
-        updateSelectedAll() {
-          this.$emit("updateSelectedAll");
-          /*
-          let arrTodoList = getAllData();
-          let strBeforeContent =
-            document.getElementById("before-update-text").value;
-          let strAfterContent = document.getElementById("after-update-text").value;
-    
-          let isUpdated = false;
-    
-          if (strAfterContent == "" || strBeforeContent == "") {
-            alert("텍스트를 입력하세요.");
-            return;
-          }
-    
-          arrTodoList.forEach((v, i) => {
-            if (v.content.indexOf(strBeforeContent) != -1) {
-              v.content = v.content.replaceAll(strBeforeContent, strAfterContent);
-              isUpdated = true;
-    
-              document.getElementById("content-" + i).textContent = v.content;
-            }
-          });
-    
-          if (!isUpdated) {
-            alert("찾으시는 문자열이 없습니다.");
-            return;
-          }
-    
-          // 모달창 닫기
-          document.getElementById("close-update-modal").click();
-    
-          */
-        },
-        clickUpdateBtn() {
-          alert("단건수정");
-          this.$emit("clickUpdateBtn");
-        },
-      },
-    };
+      alert("단건수정");
+    },
+    updateRow() {
+      let id = this.selectedId;
+      this.$emit("updateRow", id);
+
+    },
+    showModal() {
+      let txtBefore = this.txtBefore;
+      this.$emit("showModal", txtBefore);
+    }
   },
 };
 </script>
 
-<style></style>
+<style>
+#modal-1___BV_modal_footer_ {
+  display: none;
+}
+</style>

@@ -25,7 +25,6 @@ export default {
   data() {
     return {
       selected: [],
-      completed: [],
       list: [
         {
           rowId: 1,
@@ -58,7 +57,6 @@ export default {
           complete: "Y",
         },
       ],
-      complete: "",
     };
   },
   methods: {

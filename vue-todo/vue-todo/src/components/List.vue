@@ -49,18 +49,23 @@
               @click="deleteRow(item.rowId)"
               >삭제</span
             >&nbsp;&nbsp;
-            <b-button
+            <span
               style="color: blue; background-color: white; cursor: pointer"
               v-b-modal.modal-1
-              @click="clickUpdateBtn()"
-              >수정</b-button
-            >
+              @click="clickUpdateBtn(item.rowId)"
+              >수정</span>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <Popup @clickUpdateBtn="clickUpdateBtn"></Popup>
+    <Popup
+      :selectedId="selectedId"
+      :contents="contents"
+      @clickUpdateBtn="clickUpdateBtn"
+      @updateRow="updateRow"
+      @showModal="showModal"
+    ></Popup>
   </div>
 </template>
 
@@ -69,35 +74,40 @@ import Popup from "../components/Popup.vue";
 export default {
   data() {
     return {
+      selectedId: 0,
+      contents: document.getElementById("contents-" + this.selectedId).textContent,
       selected: [],
+      allChecked: false,
     };
   },
-  computed: {},
   props: ["list"],
   methods: {
-    checkAll() {
-      
-    },
+    checkAll() {},
     deleteRow(id) {
       this.$emit("deleteRow", id);
-    },
-    // 다중 삭제
-    deleteSelectedAll() {},
-    // 단건 수정폼 세팅
-    clickUpdateBtn() {
-      //let strContent = document.getElementById("contents-" + id).textContent;
-
-      document.getElementById("update-btn").style.display = "block";
-      document.getElementById("update-all-btn").style.display = "none";
-      //document.getElementById("before-update-text").value = strContent;
-      document.getElementById("before-update-text").disabled = true;
-      //document.getElementById("table-id").value = id;
-
-      console.log(document.getElementById("before-update-text").value);
     },
     selectItem() {
       this.$emit("selectItem", this.selected);
     },
+    // 단건 수정 버튼 클릭
+    clickUpdateBtn(id) {
+      this.selectedId = id;
+      alert(this.selectedId);
+
+      // let strContent = document.getElementById("contents-" + id).textContent;
+
+      // document.getElementById("update-btn").style.display = "block";
+      // document.getElementById("update-all-btn").style.display = "none";
+      // document.getElementById("before-update-text").value = strContent;
+      // document.getElementById("before-update-text").disabled = true;
+    },
+    updateRow(id) {
+      this.$emit("updateRow", id);
+    },
+    showModal(txtBefore) {
+      alert(txtBefore.textContent);
+      txtBefore.disabled = true;
+    }
   },
   components: {
     Popup,

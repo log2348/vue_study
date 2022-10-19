@@ -4,8 +4,7 @@
     <button
       type="button"
       class="btn btn-success"
-      id="show-modal"
-      @click="showModal = true"
+     v-b-modal.modal-1
     >
       일괄 수정</button
     >&nbsp;&nbsp;<router-link to="/detail" :completed="completed">
@@ -24,7 +23,6 @@
 
 <script>
 export default {
-  completed: [],
   props: ["list", "selected"],
   methods: {
     // 초기화
@@ -39,6 +37,7 @@ export default {
     },
     // 다중 삭제
     deleteSelectedData(selected) {
+      selected = this.selected;
       this.$emit("deleteSelectedData", selected);
     }
   },
