@@ -1,46 +1,36 @@
 <template>
-  <div
-    v-if="ModalDisplay"
-    class="shadow-lg w-full h-full flex bg-black bg-opacity-70 justify-center align-middle items-center"
-  >
-    <div class="w-1/3 h-1/2 bg-white rounded relative">
-      <div class="relative w-full">
-        <div class="flex text-center items-center justify-center pt-2">
-          <h1 class="font-bold text-2xl">모달창 레이아웃</h1>
-        </div>
-        <svg
-          @click="ModalDisplay = false"
-          id="closeModalBtn"
-          xmlns="http://www.w3.org/2000/svg"
-          class="cursor-pointer h-10 w-10 absolute top-0 right-0 hover:text-red-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+  <div>
+    <b-modal id="modal-1" title="내용 수정">
+      <div style="padding: 10px">
+        <label><b>수정 전</b></label
+        >&nbsp;&nbsp;
+        <input type="text" id="before-update-text" />
       </div>
-      <div class="w-full pt-5">
-        <hr />
-        <p class="py-5 px-5 text-xl">
-          안녕하십니까?<br />
-          모달창입니다.
-        </p>
+      <div style="padding: 10px">
+        <label><b>수정 후</b></label
+        >&nbsp;&nbsp;
+        <input type="text" id="after-update-text" />
       </div>
-      <div class="w-full">
+
+      <div class="modal-footer">
+        <input id="table-id" type="hidden" />
         <button
-          @click="ModalDisplay = false"
-          class="absolute bottom-0 right-0 border border-solid round w-24 h-10 my-2 mx-3 hover:text-red-700 hover:border-red-500"
+          type="button"
+          class="btn btn-primary"
+          id="update-btn"
         >
-          닫기
+          수정
+        </button>
+        <button
+          type="button"
+          style="display: none"
+          class="btn btn-primary"
+          id="update-all-btn"
+        >
+          수정
         </button>
       </div>
-    </div>
+    </b-modal>
   </div>
 </template>
 
@@ -48,17 +38,6 @@
 export default {
   data() {
     return {
-      props: {
-        visible: {
-          type: Boolean,
-          require: true,
-          default: false,
-        },
-        title: {
-          type: String,
-          require: false,
-        },
-      },
       methods: {
         // 단건 수정
         updateRow() {
@@ -113,6 +92,10 @@ export default {
           document.getElementById("close-update-modal").click();
     
           */
+        },
+        clickUpdateBtn() {
+          alert("단건수정");
+          this.$emit("clickUpdateBtn");
         },
       },
     };

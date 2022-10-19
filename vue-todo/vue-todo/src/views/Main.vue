@@ -1,8 +1,18 @@
 <template>
   <div class="container">
     <Header :list="list" @appendRow="appendRow"></Header>
-    <List :list="list" @deleteRow="deleteRow" @updateRow="updateRow"></List>
-    <Footer :list="list"></Footer>
+    <List
+      :list="list"
+      @deleteRow="deleteRow"
+      @updateRow="updateRow"
+      @selectItem="selectItem"
+    ></List>
+    <Footer
+      :list="list"
+      :selected="selected"
+      @getData="getData"
+      @deleteSelectedData="deleteSelectedData"
+    ></Footer>
   </div>
 </template>
 
@@ -14,6 +24,8 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
+      selected: [],
+      completed: [],
       list: [
         {
           rowId: 1,
@@ -82,6 +94,17 @@ export default {
     // 단건 삭제
     deleteRow(id) {
       this.list = this.list.filter((a) => a.rowId != id);
+    },
+    // 다중 삭제
+    deleteSelectedData(selected) {
+      selected.forEach((element) => {
+        this.list = this.list.filter((a) => a.rowId != element);
+      });
+    },
+    // 항목 JSON 형식 반환
+    getData() {},
+    selectItem(selected) {
+      this.selected = selected;
     },
   },
   components: {

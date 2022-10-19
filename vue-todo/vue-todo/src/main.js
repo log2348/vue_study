@@ -5,10 +5,13 @@ import router from "./router/router.js";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import VModal from 'vue-js-modal'
+Vue.use(VModal, { dynamic: true })
 
 Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
+
 
 new Vue({
   router,
