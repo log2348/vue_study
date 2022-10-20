@@ -5,10 +5,11 @@
         <tr>
           <td>
             <input
-              id="allCheck"
               name="checkbox"
               type="checkbox"
-              @change="checkAll()"
+              v-model="selectAll"
+              @click="checkAll($event.target.checked)"
+              :value="all"
             />
           </td>
           <th>날짜</th>
@@ -23,9 +24,8 @@
         <tr align="center" v-for="item in this.list" :key="item.rowId">
           <th>
             <input
-              :value="item.rowId"
               type="checkbox"
-              name="checkbox"
+              :value="item.rowId"
               v-model="selected"
               @change="selectItem()"
             />
@@ -37,7 +37,7 @@
               :id="'complete-' + item.rowId"
               type="checkbox"
               v-if="item.complete == 'Y'"
-              v-model="completed"
+              v-model="allCheck"
               checked
             />
             <input :id="'complete-' + item.rowId" type="checkbox" v-else />
@@ -80,14 +80,11 @@ export default {
       isMultiSelect: this.isUpdatedAll,
       txtBefore: "",
       selected: [],
-      allChecked: false,
     };
   },
   props: ["list", "isUpdatedAll"],
 
   methods: {
-    // 체크박스 전체 선택, 전체 해제
-    checkAll() {},
     deleteRow(id) {
       this.$emit("deleteRow", id);
     },
@@ -108,9 +105,36 @@ export default {
     updateAll(txtBefore, txtAfter) {
       this.$emit("updateAll", txtBefore, txtAfter);
     },
-  // TODO 완료여부 체크에 따른 행 색상 세팅
+
+    // TODO 완료여부 체크에 따른 행 색상 세팅
   },
-  
+  computed: {
+    selectAll: {
+      get: function () {
+        return this.list.length === this.selected.length;
+      },
+      set: function (e) {
+        this.selected = e ? this.list.map((a) => a.rowId) : [];
+      },
+    },
+    // selectAll: {
+    //     get: function () {
+    //       return this.check ? this.selected.length == this.check.length : false;
+    //     },
+    //     set: function (value) {
+    //       const selected = [];
+
+    //       if (value) {
+    //         this.check.forEach(function (content) {
+    //           selected.push(content.id);
+    //         });
+    //       }
+
+    //       this.selected = selected;
+    //     },
+    //   },
+  },
+
   components: {
     Popup,
   },
