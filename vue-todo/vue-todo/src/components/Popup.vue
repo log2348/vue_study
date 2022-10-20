@@ -4,7 +4,7 @@
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="before-update-text" v-model="before" />
+        <input type="text" id="before-update-text" v-model="before" :disabled="this.isMultiSelect == false" />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
@@ -40,7 +40,6 @@ export default {
     return {
       before: "",
       after: "",
-      modal: "",
     };
   },
   props: ["selectedId", "txtBefore", "isMultiSelect"],
@@ -49,10 +48,7 @@ export default {
     updateRow() {
       let id = this.selectedId;
       let strNewContent = this.after;
-      // let strOldContent = this.before;
       this.$emit("updateRow", id, strNewContent);
-      // TODO 모달창 닫기
-      this.initUpdateForm();
     },
     // 일괄 수정
     updateAll() {
@@ -60,11 +56,14 @@ export default {
       let txtAfter = this.after;
       this.$emit("updateAll", txtBefore, txtAfter);
     },
+    // 모달 텍스트 폼 세팅
     initUpdateForm() {
       this.before = "";
       this.after = "";
     },
+    // 모달 세팅
     setModal() {
+      this.initUpdateForm();
       this.before = this.txtBefore;
     },
   },

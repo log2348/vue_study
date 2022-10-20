@@ -10,12 +10,12 @@
         <select
           class="form-control"
           style="width: 10%"
-          @change="selectByDate()"
+          @change="selectByDate"
           v-model="selected"
         >
           <option>전체</option>
-          <option v-for="item in this.list" :key="item.rowId" :value="item.date">
-            {{ item.date }}
+          <option v-for="item in this.dataList" :key="item" :value="item.text">
+            {{ item.text }}
           </option>
         </select>
       </div>
@@ -74,6 +74,13 @@ export default {
       let contents = document.getElementById("contents").value;
 
       this.$emit("appendRow", rowId, date, contents);
+    },
+    setOption() {
+      this.list.forEach((element) => {
+        this.dataList.push(element.date);
+      });
+
+      this.dataList = Array.from(new Set(this.dataList));
     },
   },
 };

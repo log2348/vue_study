@@ -22,7 +22,7 @@
         v-model="sorted"
         @change="orderByDate"
       >
-        <option>정렬</option>
+        <option selected>정렬</option>
         <option :value="1">오름차순</option>
         <option :value="2">내림차순</option>
       </select>
@@ -53,7 +53,7 @@ export default {
   name: "detail",
   data() {
     return {
-      list: this.$route.query,
+      list: this.$route.query.filter((a) => a.complete == "Y"),
       selected: "",
       sorted: "",
     };
