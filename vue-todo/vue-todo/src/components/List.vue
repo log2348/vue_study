@@ -105,8 +105,8 @@ export default {
       this.$emit("updateRow", id, strNewContent);
     },
     updateAll(txtBefore, txtAfter) {
-      this.$emit(txtBefore, txtAfter);
-    }
+      this.$emit("updateAll", txtBefore, txtAfter);
+    },
   },
   // TODO 완료여부 체크에 따른 행 색상 세팅
   components: {

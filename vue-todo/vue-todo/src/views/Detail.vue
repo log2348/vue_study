@@ -1,6 +1,33 @@
 <template>
   <div class="container">
-   <table style="text-align: center" class="table">
+    <div class="row">
+      <select
+        class="form-control"
+        style="width: 10%"
+        v-model="selected"
+        @change="selectByDate"
+      >
+        <option :value="all">전체</option>
+        <option
+          v-for="item in $route.query"
+          :key="item.rowId"
+          :value="item.date"
+        >
+          {{ item.date }}
+        </option></select
+      >&nbsp;&nbsp;
+      <select
+        class="form-control"
+        style="width: 10%"
+        v-model="sorted"
+        @change="orderByDate"
+      >
+        <option>정렬</option>
+        <option :value="1">오름차순</option>
+        <option :value="2">내림차순</option>
+      </select>
+    </div>
+    <table style="text-align: center" class="table">
       <thead>
         <tr>
           <th>날짜</th>
@@ -9,7 +36,7 @@
       </thead>
 
       <tbody id="table-body">
-        <tr align="center" v-for="item in this.list" :key="item.rowId">
+        <tr align="center" v-for="item in list" :key="item.rowId">
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
         </tr>
@@ -23,8 +50,40 @@
 
 <script>
 export default {
-  props: ["completed"]
+  name: "detail",
+  data() {
+    return {
+      list: this.$route.query,
+      selected: "",
+      sorted: "",
+    };
+  },
+  methods: {
+    // 날짜별 검색 (필터링)
+    selectByDate() {
+      let date = this.selected;
+      this.list = this.list.filter((a) => a.date == date);
+    },
+    // 정렬
+    orderByDate() {
+      if (this.sorted == 1) {
+        // 오름차순
+        this.list = this.list.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+      } else {
+        // 내림차순
+        this.list = this.list.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+      }
+    },
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+div {
+  padding: 20px;
+}
+</style>

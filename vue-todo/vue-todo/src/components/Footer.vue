@@ -14,7 +14,10 @@
       v-b-modal.modal-1
     >
       일괄 수정</button
-    >&nbsp;&nbsp;<router-link to="/detail" :completed="completed" v-show="isUpdatedAll">
+    >&nbsp;&nbsp;<router-link
+      :to="{ name : 'detail', query: list }"
+      :completed="completed"
+    >
       <button class="btn btn-light">이동</button></router-link
     >
     <br /><br />
@@ -55,7 +58,6 @@ export default {
     // 일괄 수정 버튼 클릭
     clickUpdateAllBtn() {
       this.isUpdatedAll = true;
-      alert("일괄수정 버튼");
     },
   },
 };

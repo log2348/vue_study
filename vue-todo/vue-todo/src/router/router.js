@@ -14,10 +14,9 @@ const router = new VueRouter({
       component: Main,
     },
     {
-      name: "detail",
+      name: 'detail',
       path: "/detail",
       component: Detail,
-      props: true
     },
   ],
 });

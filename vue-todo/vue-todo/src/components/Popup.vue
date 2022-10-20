@@ -1,15 +1,10 @@
 <template>
   <div>
-    <b-modal id="modal-1" title="내용 수정" @show="setModal">
+    <b-modal id="modal-1" title="내용 수정" v-model="myModal" @show="setModal">
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input
-          type="text"
-          id="before-update-text"
-          v-model="before"
-          :disabled="!this.isMultiSelect"
-        />
+        <input type="text" id="before-update-text" v-model="before" />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
@@ -45,6 +40,7 @@ export default {
     return {
       before: "",
       after: "",
+      modal: "",
     };
   },
   props: ["selectedId", "txtBefore", "isMultiSelect"],

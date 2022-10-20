@@ -107,6 +107,10 @@ export default {
     },
     // 수정
     updateRow(iRowId, strNewContent) {
+      if (strNewContent == "") {
+        alert("내용을 입력하세요.");
+      }
+
       this.list.forEach((element) => {
         if (element.rowId == iRowId) {
           element.contents = strNewContent;
@@ -125,7 +129,6 @@ export default {
           v.contents = v.contents.replaceAll(txtBefore, txtAfter);
         }
 
-        alert("일괄수정 완료");
       });
     },
     // 단건 삭제
@@ -146,19 +149,8 @@ export default {
       this.selected = selected;
     },
     // 날짜별 검색 (필터링)
-    selectByDate() {
-      // const set = new Set(this.list.date);
-      // const uniqueArr = [...set];
-
-      let selectList = document.getElementById("selectbox-date");
-
-      let selectedDate = selectList.options[selectList.selectedIndex].value;
-      this.list = this.list.filter((a) => a.date == selectedDate);
-
-      // let dates = document.querySelector('#selectbox-date');
-
-      // dates.forEach((e) => {
-      // })
+    selectByDate(date) {
+      this.list = this.list.filter((a) => a.date == date);
     },
     getData() {
       this.$axios
