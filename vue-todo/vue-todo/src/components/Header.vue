@@ -8,12 +8,11 @@
     <div class="form-group">
       <div>
         <select
-          class="form-control"
           style="width: 10%"
           @change="selectByDate"
           v-model="selected"
         >
-          <option>전체</option>
+          <option selected>전체</option>
           <option v-for="item in this.dateList" :key="item" :value="item">
             {{ item }}
           </option>

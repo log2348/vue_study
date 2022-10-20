@@ -2,8 +2,7 @@
   <div class="container">
     <div class="row">
       <select
-        class="form-control"
-        style="width: 10%"
+        style="width: 20%"
         v-model="selected"
         @click="setOption"
         @change="selectByDate"
@@ -18,8 +17,7 @@
         </option></select
       >&nbsp;&nbsp;
       <select
-        class="form-control"
-        style="width: 10%"
+        style="width: 20%"
         v-model="sorted"
         @change="orderByDate"
       >
@@ -64,7 +62,13 @@ export default {
     // 날짜별 검색 (필터링)
     selectByDate() {
       let date = this.selected;
+
+      if (this.selected == "all") {
+        return;
+      }
+
       this.list = this.list.filter((a) => a.date == date);
+
     },
     // 정렬
     orderByDate() {
