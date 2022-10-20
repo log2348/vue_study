@@ -14,7 +14,7 @@
           id="selectbox-date"
         >
           <option>전체</option>
-          <option v-for="item in this.dataList" :key="item.rowId">
+          <option v-for="item in this.dateList" :key="item.rowId">
             {{ item.date }}
           </option>
         </select>

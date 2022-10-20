@@ -1,29 +1,38 @@
 <template>
   <div class="container" style="text-align: end">
-    <button type="button" class="btn btn-danger" @click="deleteSelectedData(selected)">선택 삭제</button>&nbsp;&nbsp;
+    <button
+      type="button"
+      class="btn btn-danger"
+      @click="deleteSelectedData(selected)"
+    >
+      선택 삭제</button
+    >&nbsp;&nbsp;
     <button
       type="button"
       class="btn btn-success"
-     v-b-modal.modal-1
+      @click="clickUpdateAllBtn"
+      v-b-modal.modal-1
     >
       일괄 수정</button
-    >&nbsp;&nbsp;<router-link to="/detail" :completed="completed">
+    >&nbsp;&nbsp;<router-link to="/detail" :completed="completed" v-show="isUpdatedAll">
       <button class="btn btn-light">이동</button></router-link
     >
     <br /><br />
-    <button class="btn btn-outline-secondary" @click="getJsonData()">항목 JSON 반환</button
+    <button class="btn btn-outline-secondary" @click="showJsonData">
+      항목 JSON 반환</button
     >&nbsp;&nbsp;
-    <button class="btn btn-outline-secondary">항목 불러오기</button>&nbsp;&nbsp;
+    <button class="btn btn-outline-secondary" @click="getData">
+      항목 불러오기</button
+    >&nbsp;&nbsp;
     <button class="btn btn-outline-secondary" @click="initData()">
       초기화
     </button>
-    
   </div>
 </template>
 
 <script>
 export default {
-  props: ["list", "selected"],
+  props: ["list", "completed", "selected", "isUpdatedAll"],
   methods: {
     // 초기화
     initData() {
@@ -40,9 +49,14 @@ export default {
       selected = this.selected;
       this.$emit("deleteSelectedData", selected);
     },
-    getJsonData() {
-      this.$emit("getJsonData");
-    }
+    showJsonData() {
+      this.$emit("showJsonData");
+    },
+    // 일괄 수정 버튼 클릭
+    clickUpdateAllBtn() {
+      this.isUpdatedAll = true;
+      alert("일괄수정 버튼");
+    },
   },
 };
 </script>

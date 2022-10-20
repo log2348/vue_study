@@ -38,18 +38,13 @@
               type="checkbox"
               v-if="item.complete == 'Y'"
               v-model="completed"
-              @click="checkComplete(item.rowId)"
               checked
             />
-            <input
-              :id="'complete-' + item.rowId"
-              type="checkbox"
-              @click="checkComplete(item.rowId)"
-              v-else
-            />
+            <input :id="'complete-' + item.rowId" type="checkbox" v-else />
           </td>
           <td></td>
           <td>
+            <input type="hidden" id="row-id" :value="item.rowId" />
             <span
               style="color: red; cursor: pointer"
               @click="deleteRow(item.rowId)"
@@ -68,10 +63,9 @@
 
     <Popup
       :selectedId="selectedId"
-      :contents="contents"
-      @clickUpdateBtn="clickUpdateBtn"
+      :txtBefore="txtBefore"
+      :isMultiSelect="isMultiSelect"
       @updateRow="updateRow"
-      @showModal="showModal"
     ></Popup>
   </div>
 </template>
@@ -81,16 +75,18 @@ import Popup from "../components/Popup.vue";
 export default {
   data() {
     return {
-      selectedId: "",
+      selectedId: 0,
+      isMultiSelect: this.isUpdatedAll,
+      dateLIst: [],
+      txtBefore: "",
       selected: [],
       allChecked: false,
     };
   },
-  props: ["list", "dateList"],
-  computed: {
-    
-  },
+  props: ["list", "isUpdatedAll"],
+
   methods: {
+    // 체크박스 전체 선택, 전체 해제
     checkAll() {},
     deleteRow(id) {
       this.$emit("deleteRow", id);
@@ -99,37 +95,20 @@ export default {
       this.$emit("selectItem", this.selected);
     },
     // 단건 수정 버튼 클릭
-    clickUpdateBtn() {
-      // this.selectedId = id;
-      // let strContent = document.getElementById("contents-" + id).textContent;
-      // document.getElementById("update-btn").style.display = "block";
-      // document.getElementById("update-all-btn").style.display = "none";
-      // document.getElementById("before-update-text").value = strContent;
-      // document.getElementById("before-update-text").disabled = true;
+    clickUpdateBtn(id) {
+      this.selectedId = id;
+      this.txtBefore = document.getElementById("contents-" + id).textContent;
+      this.isUpdatedAll = false;
     },
-    updateRow(id) {
-      this.$emit("updateRow", id);
+    // 단건 수정
+    updateRow(id, strNewContent) {
+      this.$emit("updateRow", id, strNewContent);
     },
-    showModal(txtBefore) {
-      alert(txtBefore.textContent);
-      txtBefore.disabled = true;
-    },
-  },
-  // 완료여부 체크에 따른 행 색상 세팅
-  checkComplete(id) {
-    let objTodo = this.list.find((a) => a.rowId == id);
-    let checkbox = document.getElementById("complete-" + id);
-    let targetRow = document.getElementById("complete-" + id).parentElement
-      .parentElement;
-
-    if (!objTodo.completeState) {
-      targetRow.style.background = "";
-      checkbox.removeAttribute("checked");
-    } else {
-      targetRow.style.background = "pink";
-      checkbox.setAttribute("checked", "");
+    updateAll(txtBefore, txtAfter) {
+      this.$emit(txtBefore, txtAfter);
     }
   },
+  // TODO 완료여부 체크에 따른 행 색상 세팅
   components: {
     Popup,
   },

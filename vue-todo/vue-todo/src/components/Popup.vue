@@ -1,32 +1,36 @@
 <template>
   <div>
-    <b-modal id="modal-1" title="내용 수정" @show="showModal()">
+    <b-modal id="modal-1" title="내용 수정" @show="setModal">
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="before-update-text" :value="contents" />
+        <input
+          type="text"
+          id="before-update-text"
+          v-model="before"
+          :disabled="!this.isMultiSelect"
+        />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="after-update-text" />
+        <input type="text" id="after-update-text" v-model="after" />
       </div>
 
       <div class="modal-footer">
-        <input id="table-id" type="hidden" />
         <button
           type="button"
           class="btn btn-primary"
-          id="update-btn"
-          @click="clickUpdateBtn()"
+          @click="updateRow"
+          v-show="!this.isMultiSelect"
         >
           수정
         </button>
         <button
           type="button"
-          style="display: none"
           class="btn btn-primary"
-          id="update-all-btn"
+          @click="updateAll"
+          v-show="this.isMultiSelect"
         >
           수정
         </button>
@@ -39,30 +43,34 @@
 export default {
   data() {
     return {
-      txtBefore: document.getElementById("before-update-text"),
-    }
+      before: "",
+      after: "",
+    };
   },
-  props: ["selectedId", "contents"],
+  props: ["selectedId", "txtBefore", "isMultiSelect"],
   methods: {
-    clickUpdateBtn(id) {
-      let strContent = document.getElementById("contents-" + id).textContent;
-
-      document.getElementById("update-btn").style.display = "block";
-      document.getElementById("update-all-btn").style.display = "none";
-      document.getElementById("before-update-text").value = strContent;
-      document.getElementById("before-update-text").disabled = true;
-
-      alert("단건수정");
-    },
+    // 단건 수정
     updateRow() {
       let id = this.selectedId;
-      this.$emit("updateRow", id);
-
+      let strNewContent = this.after;
+      // let strOldContent = this.before;
+      this.$emit("updateRow", id, strNewContent);
+      // TODO 모달창 닫기
+      this.initUpdateForm();
     },
-    showModal() {
-      let txtBefore = this.txtBefore;
-      this.$emit("showModal", txtBefore);
-    }
+    // 일괄 수정
+    updateAll() {
+      let txtBefore = this.before;
+      let txtAfter = this.after;
+      this.$emit("updateAll", txtBefore, txtAfter);
+    },
+    initUpdateForm() {
+      this.before = "";
+      this.after = "";
+    },
+    setModal() {
+      this.before = this.txtBefore;
+    },
   },
 };
 </script>

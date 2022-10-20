@@ -9,17 +9,20 @@
     <List
       :list="list"
       :dateList="dateList"
+      :isUpdatedAll="isUpdatedAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
       @selectItem="selectItem"
-      @checkComplete="checkComplete"
     ></List>
     <Footer
       :list="list"
       :selected="selected"
+      :completed="completed"
+      :isUpdatedAll="isUpdatedAll"
+      @updateAll="updateAll"
       @getData="getData"
       @deleteSelectedData="deleteSelectedData"
-      @getJsonData="getJsonData"
+      @showJsonData="showJsonData"
     ></Footer>
   </div>
 </template>
@@ -32,8 +35,10 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
-      dateList: [],
+      completed: [],
       selected: [],
+      dateList: [],
+      isUpdatedAll: false,
       list: [
         {
           rowId: 1,
@@ -71,6 +76,7 @@ export default {
   computed: {
     setSelectbox() {
       // 날짜 중복 제거
+      // this.dateList = this.list.filter((a) => a.date);
       return this.dateList;
     },
   },
@@ -101,8 +107,26 @@ export default {
     },
     // 수정
     updateRow(iRowId, strNewContent) {
-      alert("수정이벤트 발생");
-      document.getElementById("content-" + iRowId).textContent = strNewContent;
+      this.list.forEach((element) => {
+        if (element.rowId == iRowId) {
+          element.contents = strNewContent;
+        }
+      });
+    },
+    // 다중 수정
+    updateAll(txtBefore, txtAfter) {
+      if (txtBefore == "" || txtAfter == "") {
+        alert("텍스트를 입력하세요.");
+        return;
+      }
+
+      this.list.forEach((v) => {
+        if (v.contents.indexOf(txtBefore) != -1) {
+          v.contents = v.contents.replaceAll(txtBefore, txtAfter);
+        }
+
+        alert("일괄수정 완료");
+      });
     },
     // 단건 삭제
     deleteRow(id) {
@@ -115,7 +139,7 @@ export default {
       });
     },
     // 항목 JSON 형식 반환
-    getJsonData() {
+    showJsonData() {
       alert(JSON.stringify(this.list));
     },
     selectItem(selected) {
@@ -135,6 +159,17 @@ export default {
 
       // dates.forEach((e) => {
       // })
+    },
+    getData() {
+      this.$axios
+        .get("/todo.json")
+        .then((res) => {
+          this.list.push(...res.data);
+          console.log(res.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
   components: {
