@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="modal-1" title="내용 수정" v-model="myModal" @show="setModal">
+    <b-modal id="modal-1" title="내용 수정" @show="setModal">
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
@@ -13,18 +13,10 @@
       </div>
 
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="updateRow"
-        >
+        <button type="button" class="btn btn-primary" @click="updateRow">
           수정
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="updateAll"
-        >
+        <button type="button" class="btn btn-primary" @click="updateAll">
           일괄 수정
         </button>
       </div>
@@ -70,6 +62,9 @@ export default {
 
 <style>
 #modal-1___BV_modal_footer_ {
+  display: none;
+}
+.close {
   display: none;
 }
 </style>

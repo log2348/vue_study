@@ -4,13 +4,7 @@
       <thead>
         <tr>
           <td>
-            <input
-              name="checkbox"
-              type="checkbox"
-              v-model="selectAll"
-              @click="checkAll($event.target.checked)"
-              :value="all"
-            />
+            <input type="checkbox" v-model="selectAll" />
           </td>
           <th>날짜</th>
           <th>내용</th>
@@ -37,7 +31,6 @@
               :id="'complete-' + item.rowId"
               type="checkbox"
               v-if="item.complete == 'Y'"
-              v-model="allCheck"
               checked
             />
             <input :id="'complete-' + item.rowId" type="checkbox" v-else />
@@ -109,32 +102,16 @@ export default {
     // TODO 완료여부 체크에 따른 행 색상 세팅
   },
   computed: {
+    // 체크박스 전체 선택 및 전체 해제
     selectAll: {
-      get: function () {
+      get() {
         return this.list.length === this.selected.length;
       },
-      set: function (e) {
+      set(e) {
         this.selected = e ? this.list.map((a) => a.rowId) : [];
       },
     },
-    // selectAll: {
-    //     get: function () {
-    //       return this.check ? this.selected.length == this.check.length : false;
-    //     },
-    //     set: function (value) {
-    //       const selected = [];
-
-    //       if (value) {
-    //         this.check.forEach(function (content) {
-    //           selected.push(content.id);
-    //         });
-    //       }
-
-    //       this.selected = selected;
-    //     },
-    //   },
   },
-
   components: {
     Popup,
   },
