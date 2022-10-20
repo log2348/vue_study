@@ -4,7 +4,7 @@
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="before-update-text" v-model="before" :disabled="this.isMultiSelect == false" />
+        <input type="text" id="before-update-text" v-model="before" />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
@@ -17,7 +17,6 @@
           type="button"
           class="btn btn-primary"
           @click="updateRow"
-          v-show="!this.isMultiSelect"
         >
           수정
         </button>
@@ -25,9 +24,8 @@
           type="button"
           class="btn btn-primary"
           @click="updateAll"
-          v-show="this.isMultiSelect"
         >
-          수정
+          일괄 수정
         </button>
       </div>
     </b-modal>

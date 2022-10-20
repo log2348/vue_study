@@ -57,7 +57,7 @@ export default {
     },
     // 일괄 수정 버튼 클릭
     clickUpdateAllBtn() {
-      this.isUpdatedAll = true;
+      this.$emit("clickUpdateAllBtn");
     },
   },
 };

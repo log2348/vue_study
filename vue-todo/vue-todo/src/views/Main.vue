@@ -10,6 +10,7 @@
       :list="list"
       :dateList="dateList"
       :isUpdatedAll="isUpdatedAll"
+      @updateAll="updateAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
       @selectItem="selectItem"
@@ -19,8 +20,8 @@
       :selected="selected"
       :completed="completed"
       :isUpdatedAll="isUpdatedAll"
-      @updateAll="updateAll"
       @getData="getData"
+      @clickUpdateAllBtn="clickUpdateAllBtn"
       @deleteSelectedData="deleteSelectedData"
       @showJsonData="showJsonData"
     ></Footer>
@@ -37,7 +38,6 @@ export default {
     return {
       completed: [],
       selected: [],
-      dateList: [],
       isUpdatedAll: false,
       list: [
         {
@@ -72,13 +72,6 @@ export default {
         },
       ],
     };
-  },
-  computed: {
-    setSelectbox() {
-      // 날짜 중복 제거
-      // this.dateList = this.list.filter((a) => a.date);
-      return this.dateList;
-    },
   },
   methods: {
     // 추가
@@ -117,7 +110,7 @@ export default {
         }
       });
     },
-    // 다중 수정
+    // 일괄 수정
     updateAll(txtBefore, txtAfter) {
       if (txtBefore == "" || txtAfter == "") {
         alert("텍스트를 입력하세요.");
@@ -128,7 +121,6 @@ export default {
         if (v.contents.indexOf(txtBefore) != -1) {
           v.contents = v.contents.replaceAll(txtBefore, txtAfter);
         }
-
       });
     },
     // 단건 삭제
@@ -162,6 +154,14 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    clickUpdateAllBtn() {
+      this.isUpdatedAll = true;
+    },
+  },
+  computed: {
+    dateList: function () {
+      return Array.from(new Set(this.list.map((a) => a.date)));
     },
   },
   components: {

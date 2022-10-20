@@ -14,8 +14,8 @@
           v-model="selected"
         >
           <option>전체</option>
-          <option v-for="item in this.dataList" :key="item" :value="item.text">
-            {{ item.text }}
+          <option v-for="item in this.dateList" :key="item" :value="item">
+            {{ item }}
           </option>
         </select>
       </div>
@@ -60,7 +60,7 @@
 <script>
 export default {
   selected: "",
-  props: ["list", "dataList"],
+  props: ["list", "dateList"],
   methods: {
     // 날짜별 검색
     selectByDate() {
@@ -74,13 +74,6 @@ export default {
       let contents = document.getElementById("contents").value;
 
       this.$emit("appendRow", rowId, date, contents);
-    },
-    setOption() {
-      this.list.forEach((element) => {
-        this.dataList.push(element.date);
-      });
-
-      this.dataList = Array.from(new Set(this.dataList));
     },
   },
 };

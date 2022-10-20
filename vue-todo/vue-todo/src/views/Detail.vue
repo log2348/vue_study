@@ -5,15 +5,16 @@
         class="form-control"
         style="width: 10%"
         v-model="selected"
+        @click="setOption"
         @change="selectByDate"
       >
         <option :value="all">전체</option>
         <option
-          v-for="item in $route.query"
-          :key="item.rowId"
-          :value="item.date"
+          v-for="item in this.dateList"
+          :key="item"
+          :value="item"
         >
-          {{ item.date }}
+          {{ item }}
         </option></select
       >&nbsp;&nbsp;
       <select
@@ -56,6 +57,7 @@ export default {
       list: this.$route.query.filter((a) => a.complete == "Y"),
       selected: "",
       sorted: "",
+      dateList: []
     };
   },
   methods: {
@@ -78,6 +80,9 @@ export default {
         );
       }
     },
+    setOption() {
+      this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
+    }
   },
 };
 </script>

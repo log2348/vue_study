@@ -66,6 +66,7 @@
       :txtBefore="txtBefore"
       :isMultiSelect="isMultiSelect"
       @updateRow="updateRow"
+      @updateAll="updateAll"
     ></Popup>
   </div>
 </template>
@@ -77,7 +78,6 @@ export default {
     return {
       selectedId: 0,
       isMultiSelect: this.isUpdatedAll,
-      dateLIst: [],
       txtBefore: "",
       selected: [],
       allChecked: false,
@@ -104,11 +104,13 @@ export default {
     updateRow(id, strNewContent) {
       this.$emit("updateRow", id, strNewContent);
     },
+    // 일괄 수정
     updateAll(txtBefore, txtAfter) {
       this.$emit("updateAll", txtBefore, txtAfter);
     },
-  },
   // TODO 완료여부 체크에 따른 행 색상 세팅
+  },
+  
   components: {
     Popup,
   },
