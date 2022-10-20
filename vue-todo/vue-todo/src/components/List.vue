@@ -86,7 +86,10 @@ export default {
       allChecked: false,
     };
   },
-  props: ["list"],
+  props: ["list", "dateList"],
+  computed: {
+    
+  },
   methods: {
     checkAll() {},
     deleteRow(id) {

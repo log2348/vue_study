@@ -11,12 +11,12 @@
           class="form-control"
           style="width: 10%"
           @change="selectByDate()"
+          id="selectbox-date"
         >
           <option>전체</option>
-          <option>1</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          <option v-for="item in this.dataList" :key="item.rowId">
+            {{ item.date }}
+          </option>
         </select>
       </div>
       <br />
@@ -59,11 +59,11 @@
 
 <script>
 export default {
-  props: ["list"],
+  props: ["list", "dataList"],
   methods: {
     // 날짜별 검색
-    selectedByDate() {
-      alert("select box change");
+    selectByDate() {
+      this.$emit("selectByDate");
     },
     // 추가
     appendRow() {

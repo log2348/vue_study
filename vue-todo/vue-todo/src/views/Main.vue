@@ -1,8 +1,14 @@
 <template>
   <div class="container">
-    <Header :list="list" @appendRow="appendRow"></Header>
+    <Header
+      :list="list"
+      :dateList="dateList"
+      @appendRow="appendRow"
+      @selectByDate="selectByDate"
+    ></Header>
     <List
       :list="list"
+      :dateList="dateList"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
       @selectItem="selectItem"
@@ -26,6 +32,7 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
+      dateList: [],
       selected: [],
       list: [
         {
@@ -60,6 +67,12 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    setSelectbox() {
+      // 날짜 중복 제거
+      return this.dateList;
+    },
   },
   methods: {
     // 추가
@@ -107,6 +120,21 @@ export default {
     },
     selectItem(selected) {
       this.selected = selected;
+    },
+    // 날짜별 검색 (필터링)
+    selectByDate() {
+      // const set = new Set(this.list.date);
+      // const uniqueArr = [...set];
+
+      let selectList = document.getElementById("selectbox-date");
+
+      let selectedDate = selectList.options[selectList.selectedIndex].value;
+      this.list = this.list.filter((a) => a.date == selectedDate);
+
+      // let dates = document.querySelector('#selectbox-date');
+
+      // dates.forEach((e) => {
+      // })
     },
   },
   components: {
