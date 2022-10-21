@@ -18,7 +18,7 @@
         <tr
           :style="item.complete == 'Y' ? 'background-color: pink' : ''"
           align="center"
-          v-for="item in this.$store.state.list"
+          v-for="item in list"
           :key="item.rowId"
         >
           <th>
@@ -83,7 +83,7 @@ export default {
 
   methods: {
     deleteRow(id) {
-      this.$store.dispatch("deleteRow", id);
+      this.$emit("deleteRow", id);
     },
     selectItem() {
       this.$emit("selectItem", this.selected);
@@ -91,7 +91,7 @@ export default {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
       this.selectedId = id;
-      this.txtBefore = this.$store.state.list.find(
+      this.txtBefore = this.list.find(
         (a) => a.rowId == this.selectedId
       ).contents;
 
@@ -111,16 +111,16 @@ export default {
     // 체크박스 전체 선택 및 전체 해제
     selectAll: {
       get() {
-        return this.$store.state.list.length === this.selected.length;
+        return this.list.length === this.selected.length;
       },
       set(e) {
-        this.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
+        this.selected = e ? this.list.map((a) => a.rowId) : [];
         this.$emit("selectItem", this.selected);
       },
     },
     mount: {
       nowLength: function () {
-        return this.$store.state.list.filter((a) => a.rowId);
+        return this.list.filter((a) => a.rowId);
       },
     },
   },

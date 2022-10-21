@@ -45,7 +45,7 @@ export default {
       this.$emit("getData");
     },
     selectComplete() {
-      this.completed = this.$store.state.list.filter((a) => a.complete == "Y");
+      this.completed = this.list.filter((a) => a.complete == "Y");
     },
     // 다중 삭제
     deleteSelectedData(selected) {

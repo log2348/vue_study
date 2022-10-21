@@ -66,7 +66,7 @@ export default {
     },
     // 추가
     appendRow() {
-      let rowId = this.$store.state.list.length + 1;
+      let rowId = this.list.length + 1;
 
       this.$emit("appendRow", rowId, this.date, this.contents);
 
