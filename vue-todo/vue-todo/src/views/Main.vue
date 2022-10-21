@@ -1,30 +1,20 @@
 <template>
   <div class="container">
     <Header
-      :list="list"
       :dateList="dateList"
-      @appendRow="appendRow"
       @selectByDate="selectByDate"
     ></Header>
     <List
-      :list="list"
       :dateList="dateList"
       :isUpdatedAll="isUpdatedAll"
-      @updateAll="updateAll"
-      @deleteRow="deleteRow"
-      @updateRow="updateRow"
       @clickUpdateBtn="clickUpdateBtn"
       @selectItem="selectItem"
     ></List>
     <Footer
-      :list="list"
       :selected="selected"
-      :completed="completed"
       :isUpdatedAll="isUpdatedAll"
-      @initData="initData"
       @getData="getData"
       @clickUpdateAllBtn="clickUpdateAllBtn"
-      @deleteSelectedData="deleteSelectedData"
       @showJsonData="showJsonData"
     ></Footer>
   </div>
@@ -38,68 +28,16 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
-      completed: [],
       selected: [],
       isUpdatedAll: false,
     };
   },
   methods: {
-    // 추가
-    appendRow(rowId, date, contents) {
-      if (date == "") {
-        alert("날짜를 입력하세요.");
-        return;
-      }
-
-      if (contents == "") {
-        alert("내용을 입력하세요.");
-        return;
-      }
-
-      let objTodo = {
-        rowId: rowId + 1,
-        date: date,
-        contents: contents,
-        complete: "N",
-      };
-
-      this.$store.state.list.push(objTodo);
-    },
-    // 수정
-    updateRow(iRowId, strNewContent) {
-      if (strNewContent == "") {
-        alert("내용을 입력하세요.");
-      }
-
-      this.$store.state.list.forEach((element) => {
-        if (element.rowId == iRowId) {
-          element.contents = strNewContent;
-        }
-      });
-    },
-    // 일괄 수정
-    updateAll(txtBefore, txtAfter) {
-      if (txtBefore == "" || txtAfter == "") {
-        alert("텍스트를 입력하세요.");
-        return;
-      }
-
-      this.$store.state.list.forEach((v) => {
-        if (v.contents.indexOf(txtBefore) != -1) {
-          v.contents = v.contents.replaceAll(txtBefore, txtAfter);
-        }
-      });
-    },
-    // 다중 삭제
-    deleteSelectedData(selected) {
-      selected.forEach((element) => {
-        this.$store.state.list = this.$store.state.list.filter((a) => a.rowId != element);
-      });
-    },
     // 항목 JSON 형식 반환
     showJsonData() {
       alert(JSON.stringify(this.$store.state.list));
     },
+    // 선택된 항목 배열에 담기
     selectItem(selected) {
       this.selected = selected;
     },
@@ -108,26 +46,13 @@ export default {
       this.$store.state.list = this.$store.state.list.filter((a) => a.date == date);
     },
     getData() {
-      this.$axios
-        .get("/todo.json")
-        .then((res) => {
-          // TODO rowId값 다시 세팅
-          this.$store.state.list.push(...res.data);
-          console.log(res.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      this.$store.commit('GET_DATA');
     },
     clickUpdateBtn() {
       this.isUpdatedAll = false;
     },
     clickUpdateAllBtn() {
       this.isUpdatedAll = true;
-    },
-    // 초기화
-    initData() {
-      this.$store.state.list = [];
     },
   },
   computed: {

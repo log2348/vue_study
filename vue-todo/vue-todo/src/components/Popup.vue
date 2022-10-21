@@ -13,10 +13,18 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" @click="updateRow">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="updateRow(selectedId, after)"
+        >
           수정
         </button>
-        <button type="button" class="btn btn-primary" @click="updateAll">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="updateAll(before, after)"
+        >
           일괄 수정
         </button>
       </div>
@@ -30,20 +38,18 @@ export default {
     return {
       before: "",
       after: "",
-      isShow: true
+      isShow: true,
     };
   },
   props: ["selectedId", "txtBefore", "isMultiSelect"],
   methods: {
-    // 단건 수정
-    updateRow() {
-      this.isShow = false;
-      this.$emit("updateRow", this.selectedId, this.after);
+    updateRow(selectedId, after) {
+      this.$store.commit('UPDATE_ROW', { selectedId, after });
+      this.initUpdateForm();
     },
-    // 일괄 수정
-    updateAll() {
-      this.$emit("updateAll", this.before, this.after);
-      this.isShow = false;
+    updateAll(before, after) {
+      this.$store.commit('UPDATE_ALL', {before, after});
+      this.initUpdateForm();
     },
     // 모달 텍스트 폼 세팅
     initUpdateForm() {

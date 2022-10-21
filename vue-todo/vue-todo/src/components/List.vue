@@ -62,7 +62,6 @@
       :selectedId="selectedId"
       :txtBefore="txtBefore"
       :isMultiSelect="isMultiSelect"
-      @updateRow="updateRow"
       @updateAll="updateAll"
     ></Popup>
   </div>
@@ -79,12 +78,13 @@ export default {
       selected: [],
     };
   },
-  props: ["list", "isUpdatedAll"],
+  props: ["isUpdatedAll"],
 
   methods: {
     deleteRow(id) {
-      this.$store.dispatch("deleteRow", id);
+      this.$store.commit("DELETE_ROW", id);
     },
+    // 선택된 항목 배열에 담기
     selectItem() {
       this.$emit("selectItem", this.selected);
     },
@@ -96,14 +96,6 @@ export default {
       ).contents;
 
       this.$emit("clickUpdateBtn");
-    },
-    // 단건 수정
-    updateRow(id, strNewContent) {
-      this.$emit("updateRow", id, strNewContent);
-    },
-    // 일괄 수정
-    updateAll(txtBefore, txtAfter) {
-      this.$emit("updateAll", txtBefore, txtAfter);
     },
     // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
   },

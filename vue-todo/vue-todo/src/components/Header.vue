@@ -58,7 +58,7 @@ export default {
   selected: "",
   date: "",
   contents: "",
-  props: ["list", "dateList"],
+  props: ["dateList"],
   methods: {
     // 날짜별 검색
     selectByDate() {
@@ -67,8 +67,10 @@ export default {
     // 추가
     appendRow() {
       let rowId = this.$store.state.list.length + 1;
+      let date = this.date;
+      let contents = this.contents;
 
-      this.$emit("appendRow", rowId, this.date, this.contents);
+      this.$store.commit("APPEND_ROW", { rowId, date, contents });
 
       // 입력폼 초기화
       this.date = "";
