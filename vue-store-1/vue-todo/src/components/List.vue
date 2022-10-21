@@ -18,7 +18,7 @@
         <tr
           :style="item.complete == 'Y' ? 'background-color: pink' : ''"
           align="center"
-          v-for="item in list"
+          v-for="item in this.$store.state.list"
           :key="item.rowId"
         >
           <th>
@@ -62,7 +62,6 @@
       :selectedId="selectedId"
       :txtBefore="txtBefore"
       :isMultiSelect="isMultiSelect"
-      @updateRow="updateRow"
       @updateAll="updateAll"
     ></Popup>
   </div>
@@ -79,31 +78,24 @@ export default {
       selected: [],
     };
   },
-  props: ["list", "isUpdatedAll"],
+  props: ["isUpdatedAll"],
 
   methods: {
     deleteRow(id) {
-      this.$emit("deleteRow", id);
+      this.$store.commit("DELETE_ROW", id);
     },
+    // 선택된 항목 배열에 담기
     selectItem() {
       this.$emit("selectItem", this.selected);
     },
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
       this.selectedId = id;
-      this.txtBefore = this.list.find(
+      this.txtBefore = this.$store.state.list.find(
         (a) => a.rowId == this.selectedId
       ).contents;
 
       this.$emit("clickUpdateBtn");
-    },
-    // 단건 수정
-    updateRow(id, strNewContent) {
-      this.$emit("updateRow", id, strNewContent);
-    },
-    // 일괄 수정
-    updateAll(txtBefore, txtAfter) {
-      this.$emit("updateAll", txtBefore, txtAfter);
     },
     // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
   },
@@ -111,16 +103,16 @@ export default {
     // 체크박스 전체 선택 및 전체 해제
     selectAll: {
       get() {
-        return this.list.length === this.selected.length;
+        return this.$store.state.list.length === this.selected.length;
       },
       set(e) {
-        this.selected = e ? this.list.map((a) => a.rowId) : [];
+        this.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
         this.$emit("selectItem", this.selected);
       },
     },
     mount: {
       nowLength: function () {
-        return this.list.filter((a) => a.rowId);
+        return this.$store.state.list.filter((a) => a.rowId);
       },
     },
   },

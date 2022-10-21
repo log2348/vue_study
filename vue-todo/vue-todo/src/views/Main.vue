@@ -1,20 +1,30 @@
 <template>
   <div class="container">
     <Header
+      :list="list"
       :dateList="dateList"
+      @appendRow="appendRow"
       @selectByDate="selectByDate"
     ></Header>
     <List
+      :list="list"
       :dateList="dateList"
       :isUpdatedAll="isUpdatedAll"
+      @updateAll="updateAll"
+      @deleteRow="deleteRow"
+      @updateRow="updateRow"
       @clickUpdateBtn="clickUpdateBtn"
       @selectItem="selectItem"
     ></List>
     <Footer
+      :list="list"
       :selected="selected"
+      :completed="completed"
       :isUpdatedAll="isUpdatedAll"
+      @initData="initData"
       @getData="getData"
       @clickUpdateAllBtn="clickUpdateAllBtn"
+      @deleteSelectedData="deleteSelectedData"
       @showJsonData="showJsonData"
     ></Footer>
   </div>
@@ -28,25 +38,122 @@ import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
+      completed: [],
       selected: [],
       isUpdatedAll: false,
+      list: [
+        {
+          rowId: 1,
+          date: "2022-10-10",
+          contents: "내용1",
+          complete: "Y",
+        },
+        {
+          rowId: 2,
+          date: "2022-10-11",
+          contents: "내용2",
+          complete: "N",
+        },
+        {
+          rowId: 3,
+          date: "2022-10-11",
+          contents: "내용3",
+          complete: "N",
+        },
+        {
+          rowId: 4,
+          date: "2022-10-12",
+          contents: "내용4",
+          complete: "N",
+        },
+        {
+          rowId: 5,
+          date: "2022-10-13",
+          contents: "내용5",
+          complete: "Y",
+        },
+      ],
     };
   },
   methods: {
+    // 추가
+    appendRow(rowId, date, contents) {
+      if (date == "") {
+        alert("날짜를 입력하세요.");
+        return;
+      }
+
+      if (contents == "") {
+        alert("내용을 입력하세요.");
+        return;
+      }
+
+      let objTodo = {
+        rowId: rowId + 1,
+        date: date,
+        contents: contents,
+        complete: "N",
+      };
+
+      this.list.push(objTodo);
+    },
+    // 수정
+    updateRow(iRowId, strNewContent) {
+      if (strNewContent == "") {
+        alert("내용을 입력하세요.");
+      }
+
+      this.list.forEach((element) => {
+        if (element.rowId == iRowId) {
+          element.contents = strNewContent;
+        }
+      });
+    },
+    // 일괄 수정
+    updateAll(txtBefore, txtAfter) {
+      if (txtBefore == "" || txtAfter == "") {
+        alert("텍스트를 입력하세요.");
+        return;
+      }
+
+      this.list.forEach((v) => {
+        if (v.contents.indexOf(txtBefore) != -1) {
+          v.contents = v.contents.replaceAll(txtBefore, txtAfter);
+        }
+      });
+    },
+    // 단건 삭제
+    deleteRow(id) {
+      this.list = this.list.filter((a) => a.rowId != id);
+    },
+    // 다중 삭제
+    deleteSelectedData(selected) {
+      selected.forEach((element) => {
+        this.list = this.list.filter((a) => a.rowId != element);
+      });
+    },
     // 항목 JSON 형식 반환
     showJsonData() {
-      alert(JSON.stringify(this.$store.state.list));
+      alert(JSON.stringify(this.list));
     },
-    // 선택된 항목 배열에 담기
     selectItem(selected) {
       this.selected = selected;
     },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
-      this.$store.state.list = this.$store.state.list.filter((a) => a.date == date);
+      this.list = this.list.filter((a) => a.date == date);
     },
     getData() {
-      this.$store.commit('GET_DATA');
+      this.$axios
+        .get("/todo.json")
+        .then((res) => {
+          // TODO rowId값 다시 세팅
+          this.list.push(...res.data);
+          console.log(res.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     clickUpdateBtn() {
       this.isUpdatedAll = false;
@@ -54,11 +161,16 @@ export default {
     clickUpdateAllBtn() {
       this.isUpdatedAll = true;
     },
+    // 초기화
+    initData() {
+      this.list = [];
+    },
   },
   computed: {
     dateList: function () {
       // 중복제거한 날짜 배열에 담기
-      return Array.from(new Set(this.$store.state.list.map((a) => a.date)));
+      let arr = Array.from(new Set(this.list.map((a) => a.date)));
+      return arr;
     },
   },
   components: {
