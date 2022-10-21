@@ -44,16 +44,15 @@ export default new Vuex.Store({
   actions: {
     appendRow() {},
     deleteRow({ commit }, id) {
-      commit("DELETE_ROW", id, {root: true});
+      commit("DELETE_ROW", id);
     },
   },
   mutations: {
     // state 값을 변경하는 로직
     APPEND_ROW() {},
+    // 단건 삭제
     DELETE_ROW(state, id) {
-      state.list = state.list.filter(
-        (a) => a.rowId != id
-      );
+      state.list = state.list.filter((a) => a.rowId != id);
     },
   },
   getters: {},

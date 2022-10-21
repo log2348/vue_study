@@ -41,38 +41,6 @@ export default {
       completed: [],
       selected: [],
       isUpdatedAll: false,
-      list: [
-        {
-          rowId: 1,
-          date: "2022-10-10",
-          contents: "내용1",
-          complete: "Y",
-        },
-        {
-          rowId: 2,
-          date: "2022-10-11",
-          contents: "내용2",
-          complete: "N",
-        },
-        {
-          rowId: 3,
-          date: "2022-10-11",
-          contents: "내용3",
-          complete: "N",
-        },
-        {
-          rowId: 4,
-          date: "2022-10-12",
-          contents: "내용4",
-          complete: "N",
-        },
-        {
-          rowId: 5,
-          date: "2022-10-13",
-          contents: "내용5",
-          complete: "Y",
-        },
-      ],
     };
   },
   methods: {
@@ -121,11 +89,6 @@ export default {
           v.contents = v.contents.replaceAll(txtBefore, txtAfter);
         }
       });
-    },
-    // 단건 삭제
-    deleteRow(id) {
-      this.$store.commit("deleteRow", id);
-      // this.$store.state.list = this.$store.state.list.filter((a) => a.rowId != id);
     },
     // 다중 삭제
     deleteSelectedData(selected) {
