@@ -15,7 +15,12 @@
       </thead>
 
       <tbody id="table-body">
-        <tr align="center" v-for="item in this.list" :key="item.rowId">
+        <tr
+          :style="item.complete == 'Y' ? 'background-color: pink' : ''"
+          align="center"
+          v-for="item in this.$store.state.list"
+          :key="item.rowId"
+        >
           <th>
             <input
               type="checkbox"
@@ -24,16 +29,16 @@
               @change="selectItem()"
             />
           </th>
-          <td :id="'date-' + item.rowId">{{ item.date }}</td>
-          <td :id="'contents-' + item.rowId">{{ item.contents }}</td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.contents }}</td>
           <td>
             <input
-              :id="'complete-' + item.rowId"
               type="checkbox"
+              v-model="complete"
               v-if="item.complete == 'Y'"
               checked
             />
-            <input :id="'complete-' + item.rowId" type="checkbox" v-else />
+            <input type="checkbox" v-model="complete" v-else />
           </td>
           <td></td>
           <td>
@@ -44,7 +49,7 @@
               >삭제</span
             >&nbsp;&nbsp;
             <span
-              style="color: blue; background-color: white; cursor: pointer"
+              style="color: blue; cursor: pointer"
               v-b-modal.modal-1
               @click="clickUpdateBtn(item.rowId)"
               >수정</span
@@ -53,7 +58,6 @@
         </tr>
       </tbody>
     </table>
-
     <Popup
       :selectedId="selectedId"
       :txtBefore="txtBefore"
@@ -79,7 +83,7 @@ export default {
 
   methods: {
     deleteRow(id) {
-      this.$emit("deleteRow", id);
+      this.$store.dispatch("deleteRow", id);
     },
     selectItem() {
       this.$emit("selectItem", this.selected);
@@ -87,8 +91,11 @@ export default {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
       this.selectedId = id;
-      this.txtBefore = document.getElementById("contents-" + id).textContent;
-      this.isUpdatedAll = false;
+      this.txtBefore = this.$store.state.list.find(
+        (a) => a.rowId == this.selectedId
+      ).contents;
+
+      this.$emit("clickUpdateBtn");
     },
     // 단건 수정
     updateRow(id, strNewContent) {
@@ -98,17 +105,22 @@ export default {
     updateAll(txtBefore, txtAfter) {
       this.$emit("updateAll", txtBefore, txtAfter);
     },
-
-    // TODO 완료여부 체크에 따른 행 색상 세팅
+    // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제
     selectAll: {
       get() {
-        return this.list.length === this.selected.length;
+        return this.$store.state.list.length === this.selected.length;
       },
       set(e) {
-        this.selected = e ? this.list.map((a) => a.rowId) : [];
+        this.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
+        this.$emit("selectItem", this.selected);
+      },
+    },
+    mount: {
+      nowLength: function () {
+        return this.$store.state.list.filter((a) => a.rowId);
       },
     },
   },

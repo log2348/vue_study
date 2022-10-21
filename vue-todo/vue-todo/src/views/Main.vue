@@ -13,6 +13,7 @@
       @updateAll="updateAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
+      @clickUpdateBtn="clickUpdateBtn"
       @selectItem="selectItem"
     ></List>
     <Footer
@@ -20,6 +21,7 @@
       :selected="selected"
       :completed="completed"
       :isUpdatedAll="isUpdatedAll"
+      @initData="initData"
       @getData="getData"
       @clickUpdateAllBtn="clickUpdateAllBtn"
       @deleteSelectedData="deleteSelectedData"
@@ -93,10 +95,7 @@ export default {
         complete: "N",
       };
 
-      this.list.push(objTodo);
-
-      document.getElementById("date").value = "";
-      document.getElementById("contents").value = "";
+      this.$store.state.list.push(objTodo);
     },
     // 수정
     updateRow(iRowId, strNewContent) {
@@ -104,7 +103,7 @@ export default {
         alert("내용을 입력하세요.");
       }
 
-      this.list.forEach((element) => {
+      this.$store.state.list.forEach((element) => {
         if (element.rowId == iRowId) {
           element.contents = strNewContent;
         }
@@ -117,7 +116,7 @@ export default {
         return;
       }
 
-      this.list.forEach((v) => {
+      this.$store.state.list.forEach((v) => {
         if (v.contents.indexOf(txtBefore) != -1) {
           v.contents = v.contents.replaceAll(txtBefore, txtAfter);
         }
@@ -125,43 +124,53 @@ export default {
     },
     // 단건 삭제
     deleteRow(id) {
-      this.list = this.list.filter((a) => a.rowId != id);
+      this.$store.commit("deleteRow", id);
+      // this.$store.state.list = this.$store.state.list.filter((a) => a.rowId != id);
     },
     // 다중 삭제
     deleteSelectedData(selected) {
       selected.forEach((element) => {
-        this.list = this.list.filter((a) => a.rowId != element);
+        this.$store.state.list = this.$store.state.list.filter((a) => a.rowId != element);
       });
     },
     // 항목 JSON 형식 반환
     showJsonData() {
-      alert(JSON.stringify(this.list));
+      alert(JSON.stringify(this.$store.state.list));
     },
     selectItem(selected) {
       this.selected = selected;
     },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
-      this.list = this.list.filter((a) => a.date == date);
+      this.$store.state.list = this.$store.state.list.filter((a) => a.date == date);
     },
     getData() {
       this.$axios
         .get("/todo.json")
         .then((res) => {
-          this.list.push(...res.data);
+          // TODO rowId값 다시 세팅
+          this.$store.state.list.push(...res.data);
           console.log(res.data);
         })
         .catch(function (error) {
           console.log(error);
         });
     },
+    clickUpdateBtn() {
+      this.isUpdatedAll = false;
+    },
     clickUpdateAllBtn() {
       this.isUpdatedAll = true;
+    },
+    // 초기화
+    initData() {
+      this.$store.state.list = [];
     },
   },
   computed: {
     dateList: function () {
-      return Array.from(new Set(this.list.map((a) => a.date)));
+      // 중복제거한 날짜 배열에 담기
+      return Array.from(new Set(this.$store.state.list.map((a) => a.date)));
     },
   },
   components: {

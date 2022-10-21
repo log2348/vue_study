@@ -1,18 +1,15 @@
 <template>
   <div>
+    <br />
     <div style="text-align: center">
       <h2>My Todo List</h2>
     </div>
     <br />
     <br />
     <div class="form-group">
-      <div>
-        <select
-          style="width: 10%"
-          @change="selectByDate"
-          v-model="selected"
-        >
-          <option selected>전체</option>
+      <div style="text-align: right">
+        <select style="width: 10%" @change="selectByDate" v-model="selected">
+          <option>전체</option>
           <option v-for="item in this.dateList" :key="item" :value="item">
             {{ item }}
           </option>
@@ -25,7 +22,7 @@
           <input
             class="form-control col-sm-4 datepicker"
             placeholder="날짜를 입력하세요."
-            id="date"
+            v-model="date"
           />
         </div>
       </div>
@@ -37,8 +34,8 @@
           <input
             type="text"
             class="form-control col-sm-4"
-            id="contents"
             placeholder="내용을 입력하세요."
+            v-model="contents"
           />
         </div>
         <button
@@ -59,20 +56,23 @@
 <script>
 export default {
   selected: "",
+  date: "",
+  contents: "",
   props: ["list", "dateList"],
   methods: {
     // 날짜별 검색
     selectByDate() {
-      let date = this.selected;
-      this.$emit("selectByDate", date);
+      this.$emit("selectByDate", this.selected);
     },
     // 추가
     appendRow() {
-      let rowId = document.getElementById("table-body").childElementCount + 1;
-      let date = document.getElementById("date").value;
-      let contents = document.getElementById("contents").value;
+      let rowId = this.$store.state.list.length + 1;
 
-      this.$emit("appendRow", rowId, date, contents);
+      this.$emit("appendRow", rowId, this.date, this.contents);
+
+      // 입력폼 초기화
+      this.date = "";
+      this.contents = "";
     },
   },
 };

@@ -15,7 +15,7 @@
     >
       일괄 수정</button
     >&nbsp;&nbsp;<router-link
-      :to="{ name : 'detail', query: list }"
+      :to="{ name: 'detail', query: list }"
       :completed="completed"
     >
       <button class="btn btn-light">이동</button></router-link
@@ -27,7 +27,7 @@
     <button class="btn btn-outline-secondary" @click="getData">
       항목 불러오기</button
     >&nbsp;&nbsp;
-    <button class="btn btn-outline-secondary" @click="initData()">
+    <button class="btn btn-outline-secondary" @click="initData">
       초기화
     </button>
   </div>
@@ -39,13 +39,13 @@ export default {
   methods: {
     // 초기화
     initData() {
-      document.getElementById("table-body").innerHTML = "";
+      this.$emit("initData");
     },
     getData() {
       this.$emit("getData");
     },
     selectComplete() {
-      this.completed = this.list.filter((a) => a.complete == "Y");
+      this.completed = this.$store.state.list.filter((a) => a.complete == "Y");
     },
     // 다중 삭제
     deleteSelectedData(selected) {
