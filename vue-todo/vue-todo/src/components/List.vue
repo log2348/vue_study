@@ -73,6 +73,7 @@ import Popup from "../components/Popup.vue";
 export default {
   data() {
     return {
+      complete: "",
       selectedId: 0,
       isMultiSelect: this.isUpdatedAll,
       txtBefore: "",
@@ -106,6 +107,9 @@ export default {
       this.$emit("updateAll", txtBefore, txtAfter);
     },
     // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
+    checkComplete() {
+      
+    }
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제
