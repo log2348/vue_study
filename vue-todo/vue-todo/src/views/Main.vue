@@ -136,12 +136,24 @@ export default {
     showJsonData() {
       alert(JSON.stringify(this.list));
     },
+    // 선택 항목 배열에 담기
     selectItem(selected) {
       this.selected = selected;
     },
+    // 날짜만 배열에 담기
+    getDate() {
+      if (this.dateList.length != 0) {
+        this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
+      } else {
+        this.dateList = this.list;
+      }
+    },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
-      this.list = this.list.filter((a) => a.date == date);
+
+      if (date != "전체") {
+        this.list = this.list.filter((a) => a.date == date);
+      }
     },
     getData() {
       this.$axios

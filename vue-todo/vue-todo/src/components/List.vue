@@ -8,8 +8,7 @@
           </td>
           <th>날짜</th>
           <th>내용</th>
-          <th>완료여부</th>
-          <th></th>
+          <!-- <th>완료여부</th> -->
           <th></th>
         </tr>
       </thead>
@@ -20,18 +19,20 @@
           align="center"
           v-for="item in list"
           :key="item.rowId"
+          @click="checkComplete(item.rowId)"
         >
+        {{ item.rowId }}
           <th>
             <input
               type="checkbox"
               :value="item.rowId"
               v-model="selected"
-              @change="selectItem()"
+              @change="$emit('selectItem', selected)"
             />
           </th>
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
-          <td>
+          <!-- <td>
             <input
               type="checkbox"
               v-model="complete"
@@ -39,13 +40,12 @@
               checked
             />
             <input type="checkbox" v-model="complete" v-else />
-          </td>
-          <td></td>
+          </td> -->
           <td>
             <input type="hidden" id="row-id" :value="item.rowId" />
             <span
               style="color: red; cursor: pointer"
-              @click="deleteRow(item.rowId)"
+              @click="$emit('deleteRow', item.rowId)"
               >삭제</span
             >&nbsp;&nbsp;
             <span
@@ -81,21 +81,13 @@ export default {
     };
   },
   props: ["list", "isUpdatedAll"],
-
   methods: {
-    deleteRow(id) {
-      this.$emit("deleteRow", id);
-    },
-    selectItem() {
-      this.$emit("selectItem", this.selected);
-    },
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
       this.selectedId = id;
       this.txtBefore = this.list.find(
         (a) => a.rowId == this.selectedId
       ).contents;
-
       this.$emit("clickUpdateBtn");
     },
     // 단건 수정
@@ -106,10 +98,14 @@ export default {
     updateAll(txtBefore, txtAfter) {
       this.$emit("updateAll", txtBefore, txtAfter);
     },
-    // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
-    checkComplete() {
-      
-    }
+    // 완료여부 체크에 따른 행 색상 변경
+    checkComplete(id) {
+      alert("완료 체크" + id);
+      for (let i = 0; i < this.list.length; i++) {
+        this.list.find((a) => a.rowId == id).complete =
+          this.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";
+      }
+    },
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제

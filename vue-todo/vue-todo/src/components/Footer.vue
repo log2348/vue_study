@@ -21,13 +21,13 @@
       <button class="btn btn-light">이동</button></router-link
     >
     <br /><br />
-    <button class="btn btn-outline-secondary" @click="showJsonData">
+    <button class="btn btn-outline-secondary" @click="$emit('showJsonData')">
       항목 JSON 반환</button
     >&nbsp;&nbsp;
-    <button class="btn btn-outline-secondary" @click="getData">
+    <button class="btn btn-outline-secondary" @click="$emit('getData')">
       항목 불러오기</button
     >&nbsp;&nbsp;
-    <button class="btn btn-outline-secondary" @click="initData">
+    <button class="btn btn-outline-secondary" @click="$emit('initData')">
       초기화
     </button>
   </div>
@@ -37,13 +37,6 @@
 export default {
   props: ["list", "completed", "selected", "isUpdatedAll"],
   methods: {
-    // 초기화
-    initData() {
-      this.$emit("initData");
-    },
-    getData() {
-      this.$emit("getData");
-    },
     selectComplete() {
       this.completed = this.list.filter((a) => a.complete == "Y");
     },
@@ -51,9 +44,6 @@ export default {
     deleteSelectedData(selected) {
       selected = this.selected;
       this.$emit("deleteSelectedData", selected);
-    },
-    showJsonData() {
-      this.$emit("showJsonData");
     },
     // 일괄 수정 버튼 클릭
     clickUpdateAllBtn() {

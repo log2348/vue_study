@@ -39,20 +39,20 @@ export default {
     updateRow() {
       this.isShow = false;
       this.$emit("updateRow", this.selectedId, this.after);
+      
+      this.before = "";
+      this.after = "";
     },
     // 일괄 수정
     updateAll() {
       this.$emit("updateAll", this.before, this.after);
       this.isShow = false;
-    },
-    // 모달 텍스트 폼 세팅
-    initUpdateForm() {
+
       this.before = "";
       this.after = "";
     },
     // 모달 세팅
     setModal() {
-      this.initUpdateForm();
       this.before = this.txtBefore;
     },
   },

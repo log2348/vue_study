@@ -1,30 +1,32 @@
 <template>
   <div class="container">
+    <div style="text-align: center">
+      <h2>완료된 목록</h2>
+    </div>
     <div class="row">
-      <select
-        style="width: 20%"
-        v-model="selected"
-        @click="setOption"
-        @change="selectByDate"
-      >
-        <option :value="all">전체</option>
-        <option
-          v-for="item in this.dateList"
-          :key="item"
-          :value="item"
+      <div>
+        <select
+          style="width: 20%"
+          v-model="selected"
+          @click="setOption"
+          @change="selectByDate(selected)"
         >
-          {{ item }}
-        </option></select
-      >&nbsp;&nbsp;
-      <select
-        style="width: 20%"
-        v-model="sorted"
-        @change="orderByDate"
-      >
+          <option>전체</option>
+          <option v-for="item in this.dateList" :key="item" :value="item">
+            {{ item }}
+          </option></select
+        >&nbsp;&nbsp;
+        <button class="btn btn-light" @click="selectByDate(selected)">
+          검색
+        </button>
+      </div>
+      <div>
+      <select style="width: 20%" v-model="sorted" @change="orderByDate">
         <option selected>정렬</option>
         <option :value="1">오름차순</option>
         <option :value="2">내림차순</option>
       </select>
+      </div>
     </div>
     <table style="text-align: center" class="table">
       <thead>
@@ -55,20 +57,15 @@ export default {
       list: this.$route.query.filter((a) => a.complete == "Y"),
       selected: "",
       sorted: "",
-      dateList: []
+      dateList: [],
     };
   },
   methods: {
     // 날짜별 검색 (필터링)
-    selectByDate() {
-      let date = this.selected;
-
-      if (this.selected == "all") {
-        return;
+    selectByDate(date) {
+      if (date != "전체") {
+        this.list = this.list.filter((a) => a.date == date);
       }
-
-      this.list = this.list.filter((a) => a.date == date);
-
     },
     // 정렬
     orderByDate() {
@@ -86,7 +83,7 @@ export default {
     },
     setOption() {
       this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
-    }
+    },
   },
 };
 </script>
