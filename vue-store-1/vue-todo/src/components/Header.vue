@@ -8,12 +8,13 @@
     <br />
     <div class="form-group">
       <div style="text-align: right">
-        <select style="width: 10%" @change="selectByDate" v-model="selected">
+        <select style="width: 10%" @change="selectByDate" v-model="selected" >
           <option>전체</option>
           <option v-for="item in this.dateList" :key="item" :value="item">
             {{ item }}
           </option>
-        </select>
+        </select>&nbsp;
+          <button class="btn btn-light" @click="selectByDate">검색</button>
       </div>
       <br />
       <div style="width: 30%">

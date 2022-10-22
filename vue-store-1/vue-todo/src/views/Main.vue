@@ -43,7 +43,9 @@ export default {
     },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
-      this.$store.state.list = this.$store.state.list.filter((a) => a.date == date);
+      if (date != "전체") {
+        this.$store.state.list = this.$store.state.list.filter((a) => a.date == date);
+      }
     },
     getData() {
       this.$store.commit('GET_DATA');

@@ -20,6 +20,7 @@
           align="center"
           v-for="item in this.$store.state.list"
           :key="item.rowId"
+          @click="checkComplete(item.rowId)"
         >
           <th>
             <input
@@ -36,13 +37,19 @@
               type="checkbox"
               v-model="complete"
               v-if="item.complete == 'Y'"
+              @click="checkComplete(item.rowId)"
               checked
             />
             <input type="checkbox" v-model="complete" v-else />
           </td>
           <td></td>
           <td>
-            <input type="hidden" id="row-id" :value="item.rowId" />
+            <input
+              type="hidden"
+              id="row-id"
+              :value="item.rowId"
+              @click="checkComplete(item.rowId)"
+            />
             <span
               style="color: red; cursor: pointer"
               @click="deleteRow(item.rowId)"
@@ -97,7 +104,14 @@ export default {
 
       this.$emit("clickUpdateBtn");
     },
-    // TODO 완료여부 체크에 따라 행 색상 동적으로 변하도록
+    // 완료여부 체크에 따른 행 색상 변경
+    checkComplete(id) {
+      alert("완료 체크" + id);
+      for (let i = 0; i < this.list.length; i++) {
+        this.list.find((a) => a.rowId == id).complete =
+          this.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";
+      }
+    },
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제

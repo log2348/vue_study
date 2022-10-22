@@ -21,7 +21,6 @@
           :key="item.rowId"
           @click="checkComplete(item.rowId)"
         >
-        {{ item.rowId }}
           <th>
             <input
               type="checkbox"

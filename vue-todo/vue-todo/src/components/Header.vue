@@ -8,7 +8,7 @@
     <br />
     <div class="form-group">
       <div style="text-align: right">
-        <select style="width: 10%" @show="$emit('getDate')" v-model="selected">
+        <select style="width: 10%" @show="$emit('getDate')" v-model="selected" @change="selectByDate">
           <option>전체</option>
           <option v-for="item in this.dateList" :key="item" :value="item">
             {{ item }}

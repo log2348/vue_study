@@ -109,13 +109,18 @@ export default new Vuex.Store({
       this.$axios
         .get("/todo.json")
         .then((res) => {
-          // TODO rowId값 다시 세팅
+          // rowId값 다시 세팅 (중복 방지)
+          let rowNum = this.list.length + 1;
+          for (let i = 0; i < res.data.length; i++) {
+            res.data[i].rowId = rowNum++;
+          }
+
           state.list.push(...res.data);
           console.log(res.data);
         })
         .catch(function (error) {
           console.log(error);
         });
-    }
+    },
   },
 });
