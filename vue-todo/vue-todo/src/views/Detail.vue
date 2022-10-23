@@ -7,12 +7,11 @@
       <div>
         <select
           style="width: 20%"
-          v-model="selected"
-          @click="setOption"
-          @change="selectByDate(selected)"
+          v-model="selectedDate"
+          @change="selectByDate(selectedDate)"
         >
           <option>전체</option>
-          <option v-for="item in this.dateList" :key="item" :value="item">
+          <option v-for="item in dateList" :key="item" :value="item">
             {{ item }}
           </option></select
         >&nbsp;&nbsp;
@@ -58,10 +57,9 @@ export default {
   data() {
     return {
       list: this.$route.query.filter((a) => a.complete == "Y"),
-      selected: "",
+      seleselectedDate: "",
       sorted: "",
       isFiltered: false,
-      dateList: [],
       filteredList: [],
     };
   },
@@ -89,8 +87,11 @@ export default {
         );
       }
     },
-    setOption() {
-      this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
+  },
+  computed: {
+    dateList: function () {
+      // 중복제거한 날짜 배열에 담기
+      return Array.from(new Set(this.list.map((a) => a.date)));
     },
   },
 };
