@@ -184,6 +184,7 @@ export default {
     // 초기화
     initData() {
       this.list = [];
+      this.selected = [];
     },
     /**
      * id값 다시 세팅

@@ -125,6 +125,7 @@ export default new Vuex.Store({
     // 초기화
     INIT_DATA(state) {
       state.list = [];
+      state.selected = [];
     },
     // 항목 불러오기
     GET_DATA(state) {
