@@ -117,10 +117,9 @@ export default {
     return {
       selectedId: 0,
       txtBefore: "",
-      selected: [],
     };
   },
-  props: ["list", "filteredList", "showModal", "isUpdatedAll", "isFiltered"],
+  props: ["list", "filteredList", "showModal", "isUpdatedAll", "isFiltered", "selected"],
   methods: {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {

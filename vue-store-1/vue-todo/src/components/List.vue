@@ -37,7 +37,11 @@
               @click="$store.commit('CHECK_COMPLETE', item.rowId)"
               checked
             />
-            <input type="checkbox" @click="$store.commit('CHECK_COMPLETE', item.rowId)" v-else />
+            <input
+              type="checkbox"
+              @click="$store.commit('CHECK_COMPLETE', item.rowId)"
+              v-else
+            />
           </td>
           <td></td>
           <td>
@@ -79,7 +83,11 @@
               @click="$store.commit('CHECK_COMPLETE', item.rowId)"
               checked
             />
-            <input type="checkbox" @click="$store.commit('CHECK_COMPLETE', item.rowId)" v-else />
+            <input
+              type="checkbox"
+              @click="$store.commit('CHECK_COMPLETE', item.rowId)"
+              v-else
+            />
           </td>
           <td></td>
           <td>
@@ -98,10 +106,7 @@
         </tr>
       </tbody>
     </table>
-    <Popup
-      :txtBefore="txtBefore"
-      :selectedId="selectedId"
-    ></Popup>
+    <Popup :txtBefore="txtBefore" :selectedId="selectedId"></Popup>
   </div>
 </template>
 
@@ -123,17 +128,19 @@ export default {
         (a) => a.rowId == this.selectedId
       ).contents;
 
-      this.$store.dispatch('clickUpdateBtn', this.selectedId);
+      this.$store.dispatch("clickUpdateBtn", this.selectedId);
     },
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제
     selectAll: {
       get() {
-        return this.$store.state.list.length === this.$store.state.selected.length;
+          return this.$store.state.list.length === this.$store.state.selected.length;
       },
-      set(e) {
-        this.$store.state.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
+      set(boolean) {
+        this.$store.state.selected = boolean
+          ? this.$store.state.list.map((a) => a.rowId)
+          : [];
       },
     },
   },

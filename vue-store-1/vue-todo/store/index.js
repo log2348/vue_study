@@ -73,23 +73,27 @@ export default new Vuex.Store({
       }
 
       let objTodo = {
-        rowId: state.list.length + 1,
+        rowId: 0,
         date: data.date,
         contents: data.contents,
         complete: "N",
       };
 
       state.list.push(objTodo);
+      this.commit("SET_INDEX");
     },
     // 단건 삭제
     DELETE_ROW(state, id) {
       state.list = state.list.filter((a) => a.rowId != id);
+      this.commit("SET_INDEX");
     },
     // 다중 삭제
     DELETE_ALL(state, selected) {
       selected.forEach((element) => {
         state.list = state.list.filter((a) => a.rowId != element);
       });
+      state.selected = [];
+      this.commit("SET_INDEX");
     },
     // 단건 수정
     UPDATE_ROW(state, data) {
@@ -127,14 +131,8 @@ export default new Vuex.Store({
       axios
         .get("/todo.json")
         .then((res) => {
-          // rowId값 다시 세팅 (중복 방지)
-          let rowNum = state.list.length + 1;
-          for (let i = 0; i < res.data.length; i++) {
-            res.data[i].rowId = rowNum++;
-          }
-
           state.list.push(...res.data);
-          console.log(res.data);
+          this.commit("SET_INDEX");
         })
         .catch(function (error) {
           console.log(error);
@@ -168,6 +166,20 @@ export default new Vuex.Store({
       state.showModal = true;
       state.isUpdatedAll = true;
     },
+    /**
+     * id값 다시 세팅
+     * 다중 삭제시 오류 방지 위함
+     */
+    SET_INDEX(state) {
+      for (let i = 0; i < state.list.length; i++) {
+        state.list[i].rowId = i + 1;
+      }
+    },
   },
-  getters: {},
+  getters: {
+    // 현재 리스트의 날짜 중복 제거 후 가져오기
+    getDateList: (state) => {
+      return new Array.from(new Set(state.dateList.map((a) => a.date)));
+    },
+  },
 });

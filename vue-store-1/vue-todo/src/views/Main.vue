@@ -17,11 +17,6 @@ export default {
     List,
     Footer,
   },
-  computed: {
-    dateList: function() {
-      
-    }
-  }
 };
 </script>
 

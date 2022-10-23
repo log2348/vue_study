@@ -8,13 +8,26 @@
     <br />
     <div class="form-group">
       <div style="text-align: right">
-        <select style="width: 10%" @click="$store.commit('GET_DATE_LIST')" v-model="selectedDate" >
+        <select
+          style="width: 10%"
+          @click="$store.commit('GET_DATE_LIST')"
+          v-model="selectedDate"
+        >
           <option>전체</option>
-          <option v-for="item in $store.state.dateList" :key="item" :value="item">
+          <option
+            v-for="item in $store.state.dateList"
+            :key="item"
+            :value="item"
+          >
             {{ item }}
-          </option>
-        </select>&nbsp;&nbsp;
-          <button class="btn btn-light" @click="$store.commit('SELECT_BY_DATE', selectedDate)">검색</button>
+          </option></select
+        >&nbsp;&nbsp;
+        <button
+          class="btn btn-light"
+          @click="$store.commit('SELECT_BY_DATE', selectedDate)"
+        >
+          검색
+        </button>
       </div>
       <br />
       <div style="width: 30%">
@@ -55,6 +68,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   selectedDate: "",
   date: "",
@@ -75,6 +90,9 @@ export default {
       this.date = "";
       this.contents = "";
     },
+  },
+  computed: {
+    ...mapGetters([]),
   },
 };
 </script>

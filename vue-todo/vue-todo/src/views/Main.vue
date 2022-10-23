@@ -9,6 +9,7 @@
     <List
       :list="list"
       :dateList="dateList"
+      :selected="selected"
       :showModal="showModal"
       :isUpdatedAll="isUpdatedAll"
       :isFiltered="isFiltered"
@@ -134,12 +135,15 @@ export default {
     // 단건 삭제
     deleteRow(id) {
       this.list = this.list.filter((a) => a.rowId != id);
+      this.setIndex();
     },
     // 다중 삭제
     deleteSelectedData(selected) {
       selected.forEach((element) => {
         this.list = this.list.filter((a) => a.rowId != element);
       });
+      this.selected = [];
+      this.setIndex();
     },
     // 항목 JSON 형식 반환
     showJsonData() {
@@ -162,15 +166,8 @@ export default {
       this.$axios
         .get("/todo.json")
         .then((res) => {
-          console.log(res.data);
-          // rowId값 다시 세팅 (중복 방지)
-          let rowNum = this.list.length + 1;
-          for (let i = 0; i < res.data.length; i++) {
-            res.data[i].rowId = rowNum++;
-          }
-
           this.list.push(...res.data);
-          console.log(res.data);
+          this.setIndex();
         })
         .catch(function (error) {
           console.log(error);
@@ -187,6 +184,15 @@ export default {
     // 초기화
     initData() {
       this.list = [];
+    },
+    /**
+     * id값 다시 세팅
+     * 다중 삭제시 오류 방지 위함
+     */
+    setIndex() {
+      for (let i = 0; i < this.list.length; i++) {
+        this.list[i].rowId = i + 1;
+      }
     },
   },
   computed: {
