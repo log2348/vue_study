@@ -10,6 +10,7 @@
       :list="list"
       :dateList="dateList"
       :isUpdatedAll="isUpdatedAll"
+      :showModal="showModal"
       @updateAll="updateAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
@@ -20,6 +21,7 @@
       :list="list"
       :selected="selected"
       :completed="completed"
+      :showModal="showModal"
       :isUpdatedAll="isUpdatedAll"
       @initData="initData"
       @getData="getData"
@@ -40,6 +42,7 @@ export default {
     return {
       completed: [],
       selected: [],
+      showModal: false,
       isUpdatedAll: false,
       list: [
         {
@@ -77,7 +80,7 @@ export default {
   },
   methods: {
     // 추가
-    appendRow(rowId, date, contents) {
+    appendRow(date, contents) {
       if (date == "") {
         alert("날짜를 입력하세요.");
         return;
@@ -89,7 +92,7 @@ export default {
       }
 
       let objTodo = {
-        rowId: rowId + 1,
+        rowId: this.list.length + 1,
         date: date,
         contents: contents,
         complete: "N",
@@ -108,6 +111,9 @@ export default {
           element.contents = strNewContent;
         }
       });
+
+      // 모달창 닫기
+      this.showModal = false;
     },
     // 일괄 수정
     updateAll(txtBefore, txtAfter) {
@@ -121,6 +127,7 @@ export default {
           v.contents = v.contents.replaceAll(txtBefore, txtAfter);
         }
       });
+      this.showModal = false;
     },
     // 단건 삭제
     deleteRow(id) {
@@ -140,7 +147,7 @@ export default {
     selectItem(selected) {
       this.selected = selected;
     },
-    // 날짜만 배열에 담기
+    // selectbox 날짜 세팅
     getDate() {
       if (this.dateList.length != 0) {
         this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
@@ -150,7 +157,6 @@ export default {
     },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
-
       if (date != "전체") {
         this.list = this.list.filter((a) => a.date == date);
       }
@@ -174,9 +180,11 @@ export default {
         });
     },
     clickUpdateBtn() {
+      this.showModal = true;
       this.isUpdatedAll = false;
     },
     clickUpdateAllBtn() {
+      this.showModal = true;
       this.isUpdatedAll = true;
     },
     // 초기화
@@ -187,8 +195,7 @@ export default {
   computed: {
     dateList: function () {
       // 중복제거한 날짜 배열에 담기
-      let arr = Array.from(new Set(this.list.map((a) => a.date)));
-      return arr;
+      return Array.from(new Set(this.list.map((a) => a.date)));
     },
   },
   components: {

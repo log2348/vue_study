@@ -106,7 +106,6 @@ export default {
     },
     // 완료여부 체크에 따른 행 색상 변경
     checkComplete(id) {
-      alert("완료 체크" + id);
       for (let i = 0; i < this.list.length; i++) {
         this.list.find((a) => a.rowId == id).complete =
           this.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";

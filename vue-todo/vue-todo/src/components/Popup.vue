@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="modal-1" title="내용 수정" @show="setModal" v-show="isShow">
+    <b-modal id="modal-1" title="내용 수정" @show="setModal" v-if="showModal">
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
@@ -30,29 +30,23 @@ export default {
     return {
       before: "",
       after: "",
-      isShow: true
     };
   },
-  props: ["selectedId", "txtBefore", "isMultiSelect"],
+  props: ["selectedId", "txtBefore", "isMultiSelect", "showModal"],
   methods: {
     // 단건 수정
     updateRow() {
-      this.isShow = false;
       this.$emit("updateRow", this.selectedId, this.after);
-      
-      this.before = "";
-      this.after = "";
     },
     // 일괄 수정
     updateAll() {
+      this.txtBefore = "";
       this.$emit("updateAll", this.before, this.after);
-      this.isShow = false;
-
-      this.before = "";
-      this.after = "";
     },
     // 모달 세팅
     setModal() {
+      this.before = "";
+      this.after = "";
       this.before = this.txtBefore;
     },
   },

@@ -60,6 +60,7 @@
     <Popup
       :selectedId="selectedId"
       :txtBefore="txtBefore"
+      :showModal="showModal"
       :isMultiSelect="isMultiSelect"
       @updateRow="updateRow"
       @updateAll="updateAll"
@@ -79,7 +80,7 @@ export default {
       selected: [],
     };
   },
-  props: ["list", "isUpdatedAll"],
+  props: ["list", "isUpdatedAll", "showModal"],
   methods: {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
@@ -99,7 +100,6 @@ export default {
     },
     // 완료여부 체크에 따른 행 색상 변경
     checkComplete(id) {
-      alert("완료 체크" + id);
       for (let i = 0; i < this.list.length; i++) {
         this.list.find((a) => a.rowId == id).complete =
           this.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";

@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ["list", "completed", "selected", "isUpdatedAll"],
+  props: ["list", "completed", "selected", "isUpdatedAll", "showModal"],
   methods: {
     selectComplete() {
       this.completed = this.list.filter((a) => a.complete == "Y");

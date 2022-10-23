@@ -67,11 +67,10 @@ export default {
     },
     // 추가
     appendRow() {
-      let rowId = this.$store.state.list.length + 1;
       let date = this.date;
       let contents = this.contents;
 
-      this.$store.commit("APPEND_ROW", { rowId, date, contents });
+      this.$store.commit("APPEND_ROW", { date, contents });
 
       // 입력폼 초기화
       this.date = "";

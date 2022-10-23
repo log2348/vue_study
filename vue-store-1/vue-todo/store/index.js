@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -42,7 +43,7 @@ export default new Vuex.Store({
     };
   },
   actions: {
-    // JSON
+    // 날짜 검색
   },
   // state 값을 변경하는 로직
   mutations: {
@@ -56,9 +57,9 @@ export default new Vuex.Store({
         alert("내용을 입력하세요.");
         return;
       }
-      // TODO id값 중복 안되도록
+
       let objTodo = {
-        rowId: data.rowId + 1,
+        rowId: state.list.length + 1,
         date: data.date,
         contents: data.contents,
         complete: "N",
@@ -105,12 +106,13 @@ export default new Vuex.Store({
     INIT_DATA(state) {
       state.list = [];
     },
+    // 항목 불러오기
     GET_DATA(state) {
-      this.$axios
+      axios
         .get("/todo.json")
         .then((res) => {
           // rowId값 다시 세팅 (중복 방지)
-          let rowNum = this.list.length + 1;
+          let rowNum = state.list.length + 1;
           for (let i = 0; i < res.data.length; i++) {
             res.data[i].rowId = rowNum++;
           }

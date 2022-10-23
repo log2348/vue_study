@@ -65,9 +65,7 @@ export default {
     },
     // 추가
     appendRow() {
-      let rowId = this.list.length + 1;
-
-      this.$emit("appendRow", rowId, this.date, this.contents);
+      this.$emit("appendRow", this.date, this.contents);
 
       // 입력폼 초기화
       this.date = "";

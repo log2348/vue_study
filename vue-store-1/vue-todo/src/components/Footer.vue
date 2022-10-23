@@ -24,7 +24,7 @@
     <button class="btn btn-outline-secondary" @click="showJsonData">
       항목 JSON 반환</button
     >&nbsp;&nbsp;
-    <button class="btn btn-outline-secondary" @click="getData">
+    <button class="btn btn-outline-secondary" @click="$store.commit('GET_DATA')">
       항목 불러오기</button
     >&nbsp;&nbsp;
     <button
@@ -40,9 +40,6 @@
 export default {
   props: ["completed", "selected", "isUpdatedAll"],
   methods: {
-    getData() {
-      this.$store.commit("GET_DATA");
-    },
     selectComplete() {
       this.completed = this.$store.state.list.filter((a) => a.complete == "Y");
     },

@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+     <div style="text-align: center">
+      <h2>완료된 목록</h2>
+    </div>
     <div class="row">
       <select
         style="width: 20%"
