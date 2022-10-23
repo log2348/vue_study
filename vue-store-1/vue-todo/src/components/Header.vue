@@ -13,8 +13,8 @@
           <option v-for="item in $store.state.dateList" :key="item" :value="item">
             {{ item }}
           </option>
-        </select>
-          <button class="btn btn-light" @click="selectByDate(selectedDate)">검색</button>
+        </select>&nbsp;&nbsp;
+          <button class="btn btn-light" @click="$store.commit('SELECT_BY_DATE', selectedDate)">검색</button>
       </div>
       <br />
       <div style="width: 30%">

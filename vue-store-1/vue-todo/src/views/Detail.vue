@@ -1,30 +1,21 @@
 <template>
   <div class="container">
-     <div style="text-align: center">
+    <div style="text-align: center">
       <h2>완료된 목록</h2>
     </div>
     <div class="row">
       <select
         style="width: 20%"
-        v-model="selected"
+        v-model="selectedDate"
         @click="setOption"
-        @change="selectByDate"
+        @change="selectByDate(selectedDate)"
       >
-        <option :value="all">전체</option>
-        <option
-          v-for="item in this.dateList"
-          :key="item"
-          :value="item"
-        >
+        <option>전체</option>
+        <option v-for="item in dateList" :key="item" :value="item">
           {{ item }}
         </option></select
       >&nbsp;&nbsp;
-      <select
-        style="width: 20%"
-        v-model="sorted"
-        @change="orderByDate"
-      >
-        <option selected>정렬</option>
+      <select style="width: 20%" v-model="sorted" @change="orderByDate">
         <option :value="1">오름차순</option>
         <option :value="2">내림차순</option>
       </select>
@@ -37,8 +28,15 @@
         </tr>
       </thead>
 
-      <tbody id="table-body">
+      <tbody id="table-body" v-if="!isFiltered">
         <tr align="center" v-for="item in list" :key="item.rowId">
+          <td>{{ item.date }}</td>
+          <td>{{ item.contents }}</td>
+        </tr>
+      </tbody>
+
+      <tbody id="table-body" v-if="isFiltered">
+        <tr align="center" v-for="item in filteredList" :key="item.rowId">
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
         </tr>
@@ -56,22 +54,21 @@ export default {
   data() {
     return {
       list: this.$route.query.filter((a) => a.complete == "Y"),
-      selected: "",
+      selectedDate: "",
       sorted: "",
-      dateList: []
+      dateList: [],
+      filteredList: []
     };
   },
   methods: {
-    // 날짜별 검색 (필터링)
-    selectByDate() {
-      let date = this.selected;
-
-      if (this.selected == "all") {
-        return;
+     // 날짜별 검색
+    selectByDate(date) {
+      if (date != "전체") {
+        this.filteredList = this.list.filter((a) => a.date == date);
+        this.isFiltered = true;
+      } else {
+        this.isFiltered = false;
       }
-
-      this.list = this.list.filter((a) => a.date == date);
-
     },
     // 정렬
     orderByDate() {
@@ -87,9 +84,10 @@ export default {
         );
       }
     },
+    // selectbox 세팅
     setOption() {
       this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
-    }
+    },
   },
 };
 </script>

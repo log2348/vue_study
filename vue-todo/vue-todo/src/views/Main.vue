@@ -149,20 +149,10 @@ export default {
     selectItem(selected) {
       this.selected = selected;
     },
-    // selectbox 날짜 세팅
-    getDate() {
-      if (this.dateList.length != 0) {
-        this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
-      } else {
-        this.dateList = this.list;
-      }
-    },
     // 날짜별 검색 (필터링)
     selectByDate(date) {
       if (date != "전체") {
-        this.filteredList = this.list.filter(
-          (a) => a.date == date
-        );
+        this.filteredList = this.list.filter((a) => a.date == date);
         this.isFiltered = true;
       } else {
         this.isFiltered = false;

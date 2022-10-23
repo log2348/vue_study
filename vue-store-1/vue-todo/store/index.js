@@ -5,15 +5,12 @@ import axios from "axios";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  // 컴포넌트 간에 공유할 data
   state() {
     return {
       isFiltered: false,
       isUpdatedAll: false,
       showModal: false,
-      // 체크된 항목 배열
       selected: [],
-      // 날짜만 담은 배열
       dateList: [],
       filteredList: [],
       list: [
@@ -62,9 +59,7 @@ export default new Vuex.Store({
     showJsonData() {
       alert(JSON.stringify(this.state.list));
     },
-    // 날짜 검색
   },
-  // state 값을 변경하는 로직
   mutations: {
     // 추가
     APPEND_ROW(state, data) {
@@ -146,17 +141,22 @@ export default new Vuex.Store({
         });
     },
     GET_DATE_LIST(state) {
-      state.dateList = Array.from(
-        new Set(state.list.map((a) => a.date))
-      );
+      state.dateList = Array.from(new Set(state.list.map((a) => a.date)));
+    },
+    // 날짜 검색
+    SELECT_BY_DATE(state, date) {
+      if (date != "전체") {
+        state.filteredList = state.list.filter((a) => a.date == date);
+        state.isFiltered = true;
+      } else {
+        state.isFiltered = false;
+      }
     },
     // 완료여부 변경
     CHECK_COMPLETE(state, id) {
       for (let i = 0; i < state.list.length; i++) {
         state.list.find((a) => a.rowId == id).complete =
-          state.list.find((a) => a.rowId == id).complete == "N"
-            ? "Y"
-            : "N";
+          state.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";
       }
     },
     CLICK_UPDATE_BTN(state, id) {
@@ -169,6 +169,5 @@ export default new Vuex.Store({
       state.isUpdatedAll = true;
     },
   },
-  getters: {
-  }
+  getters: {},
 });
