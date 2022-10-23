@@ -7,7 +7,6 @@
       <select
         style="width: 20%"
         v-model="selectedDate"
-        @click="setOption"
         @change="selectByDate(selectedDate)"
       >
         <option>전체</option>
@@ -56,12 +55,11 @@ export default {
       list: this.$route.query.filter((a) => a.complete == "Y"),
       selectedDate: "",
       sorted: "",
-      dateList: [],
-      filteredList: []
+      filteredList: [],
     };
   },
   methods: {
-     // 날짜별 검색
+    // 날짜별 검색
     selectByDate(date) {
       if (date != "전체") {
         this.filteredList = this.list.filter((a) => a.date == date);
@@ -84,9 +82,10 @@ export default {
         );
       }
     },
-    // selectbox 세팅
-    setOption() {
-      this.dateList = Array.from(new Set(this.list.map((a) => a.date)));
+  },
+  computed: {
+    dateList: function () {
+      return Array.from(new Set(this.list.map((a) => a.date)));
     },
   },
 };
