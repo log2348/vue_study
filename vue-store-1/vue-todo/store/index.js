@@ -8,7 +8,14 @@ export default new Vuex.Store({
   // 컴포넌트 간에 공유할 data
   state() {
     return {
+      isFiltered: false,
+      isUpdatedAll: false,
       showModal: false,
+      // 체크된 항목 배열
+      selected: [],
+      // 날짜만 담은 배열
+      dateList: [],
+      filteredList: [],
       list: [
         {
           rowId: 1,
@@ -44,6 +51,17 @@ export default new Vuex.Store({
     };
   },
   actions: {
+    // 단건 수정 버튼 클릭
+    clickUpdateBtn({ commit }, id) {
+      commit("CLICK_UPDATE_BTN", id);
+    },
+    // 일괄 수정 버튼 클릭
+    clickUpdateAllBtn({ commit }) {
+      commit("CLICK_UPDATE_ALL_BTN");
+    },
+    showJsonData() {
+      alert(JSON.stringify(this.state.list));
+    },
     // 날짜 검색
   },
   // state 값을 변경하는 로직
@@ -89,6 +107,7 @@ export default new Vuex.Store({
           element.contents = data.after;
         }
       });
+      state.showModal = false;
     },
     // 일괄 수정
     UPDATE_ALL(state, data) {
@@ -102,6 +121,7 @@ export default new Vuex.Store({
           v.contents = v.contents.replaceAll(data.before, data.after);
         }
       });
+      state.showModal = false;
     },
     // 초기화
     INIT_DATA(state) {
@@ -125,5 +145,30 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    GET_DATE_LIST(state) {
+      state.dateList = Array.from(
+        new Set(state.list.map((a) => a.date))
+      );
+    },
+    // 완료여부 변경
+    CHECK_COMPLETE(state, id) {
+      for (let i = 0; i < state.list.length; i++) {
+        state.list.find((a) => a.rowId == id).complete =
+          state.list.find((a) => a.rowId == id).complete == "N"
+            ? "Y"
+            : "N";
+      }
+    },
+    CLICK_UPDATE_BTN(state, id) {
+      state.selected = id;
+      state.showModal = true;
+      state.isUpdatedAll = false;
+    },
+    CLICK_UPDATE_ALL_BTN(state) {
+      state.showModal = true;
+      state.isUpdatedAll = true;
+    },
   },
+  getters: {
+  }
 });

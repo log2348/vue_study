@@ -11,6 +11,8 @@
       :dateList="dateList"
       :showModal="showModal"
       :isUpdatedAll="isUpdatedAll"
+      :isFiltered="isFiltered"
+      :filteredList="filteredList"
       @updateAll="updateAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
@@ -40,6 +42,8 @@ export default {
     return {
       completed: [],
       selected: [],
+      filteredList: [],
+      isFiltered: false,
       isUpdatedAll: false,
       showModal: false,
       list: [
@@ -156,7 +160,12 @@ export default {
     // 날짜별 검색 (필터링)
     selectByDate(date) {
       if (date != "전체") {
-        this.list = this.list.filter((a) => a.date == date);
+        this.filteredList = this.list.filter(
+          (a) => a.date == date
+        );
+        this.isFiltered = true;
+      } else {
+        this.isFiltered = false;
       }
     },
     getData() {

@@ -16,16 +16,12 @@
             {{ item }}
           </option></select
         >&nbsp;&nbsp;
-        <button class="btn btn-light" @click="selectByDate(selected)">
-          검색
-        </button>
       </div>
       <div>
-      <select style="width: 20%" v-model="sorted" @change="orderByDate">
-        <option selected>정렬</option>
-        <option :value="1">오름차순</option>
-        <option :value="2">내림차순</option>
-      </select>
+        <select style="width: 20%" v-model="sorted" @change="orderByDate">
+          <option :value="1">오름차순</option>
+          <option :value="2">내림차순</option>
+        </select>
       </div>
     </div>
     <table style="text-align: center" class="table">
@@ -36,8 +32,15 @@
         </tr>
       </thead>
 
-      <tbody id="table-body">
+      <tbody id="table-body" v-if="!isFiltered">
         <tr align="center" v-for="item in list" :key="item.rowId">
+          <td>{{ item.date }}</td>
+          <td>{{ item.contents }}</td>
+        </tr>
+      </tbody>
+
+      <tbody id="table-body" v-if="isFiltered">
+        <tr align="center" v-for="item in filteredList" :key="item.rowId">
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
         </tr>
@@ -57,14 +60,19 @@ export default {
       list: this.$route.query.filter((a) => a.complete == "Y"),
       selected: "",
       sorted: "",
+      isFiltered: false,
       dateList: [],
+      filteredList: [],
     };
   },
   methods: {
     // 날짜별 검색 (필터링)
     selectByDate(date) {
       if (date != "전체") {
-        this.list = this.list.filter((a) => a.date == date);
+        this.filteredList = this.list.filter((a) => a.date == date);
+        this.isFiltered = true;
+      } else {
+        this.isFiltered = false;
       }
     },
     // 정렬

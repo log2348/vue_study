@@ -8,13 +8,13 @@
     <br />
     <div class="form-group">
       <div style="text-align: right">
-        <select style="width: 10%" @change="selectByDate" v-model="selected" >
+        <select style="width: 10%" @click="$store.commit('GET_DATE_LIST')" v-model="selectedDate" >
           <option>전체</option>
-          <option v-for="item in this.dateList" :key="item" :value="item">
+          <option v-for="item in $store.state.dateList" :key="item" :value="item">
             {{ item }}
           </option>
-        </select>&nbsp;
-          <button class="btn btn-light" @click="selectByDate">검색</button>
+        </select>
+          <button class="btn btn-light" @click="selectByDate(selectedDate)">검색</button>
       </div>
       <br />
       <div style="width: 30%">
@@ -41,7 +41,7 @@
         </div>
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-light"
           style="width=10%"
           @click="appendRow()"
         >
@@ -56,14 +56,13 @@
 
 <script>
 export default {
-  selected: "",
+  selectedDate: "",
   date: "",
   contents: "",
-  props: ["dateList"],
   methods: {
     // 날짜별 검색
-    selectByDate() {
-      this.$emit("selectByDate", this.selected);
+    selectByDate(selectedDate) {
+      this.$emit("selectByDate", selectedDate);
     },
     // 추가
     appendRow() {

@@ -14,7 +14,6 @@
             {{ item }}
           </option>
         </select> &nbsp;
-        <button class="btn btn-light" @click="selectByDate">검색</button>
       </div>
       <br />
       <div style="width: 30%">

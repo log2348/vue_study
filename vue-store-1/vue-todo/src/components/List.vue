@@ -14,20 +14,18 @@
         </tr>
       </thead>
 
-      <tbody id="table-body">
+      <tbody id="table-body" v-if="$store.state.isFiltered">
         <tr
           :style="item.complete == 'Y' ? 'background-color: pink' : ''"
           align="center"
-          v-for="item in this.$store.state.list"
+          v-for="item in this.$store.state.filteredList"
           :key="item.rowId"
-          @click="checkComplete(item.rowId)"
         >
           <th>
             <input
               type="checkbox"
               :value="item.rowId"
-              v-model="selected"
-              @change="selectItem()"
+              v-model="$store.state.selected"
             />
           </th>
           <td>{{ item.date }}</td>
@@ -36,22 +34,58 @@
             <input
               type="checkbox"
               v-if="item.complete == 'Y'"
-              @click="checkComplete(item.rowId)"
+              @click="$store.commit('CHECK_COMPLETE', item.rowId)"
               checked
             />
-            <input type="checkbox" @click="checkComplete(item.rowId)" v-else />
+            <input type="checkbox" @click="$store.commit('CHECK_COMPLETE', item.rowId)" v-else />
           </td>
           <td></td>
           <td>
-            <input
-              type="hidden"
-              id="row-id"
-              :value="item.rowId"
-              @click="checkComplete(item.rowId)"
-            />
             <span
               style="color: red; cursor: pointer"
-              @click="deleteRow(item.rowId)"
+              @click="$store.commit('DELETE_ROW', item.rowId)"
+              >삭제</span
+            >&nbsp;&nbsp;
+            <span
+              style="color: blue; cursor: pointer"
+              v-b-modal.modal-1
+              @click="clickUpdateBtn(item.rowId)"
+              >수정</span
+            >
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody id="table-body" v-if="!$store.state.isFiltered">
+        <tr
+          :style="item.complete == 'Y' ? 'background-color: pink' : ''"
+          align="center"
+          v-for="item in this.$store.state.list"
+          :key="item.rowId"
+        >
+          <th>
+            <input
+              type="checkbox"
+              :value="item.rowId"
+              v-model="$store.state.selected"
+            />
+          </th>
+          <td>{{ item.date }}</td>
+          <td>{{ item.contents }}</td>
+          <td>
+            <input
+              type="checkbox"
+              v-if="item.complete == 'Y'"
+              @click="$store.commit('CHECK_COMPLETE', item.rowId)"
+              checked
+            />
+            <input type="checkbox" @click="$store.commit('CHECK_COMPLETE', item.rowId)" v-else />
+          </td>
+          <td></td>
+          <td>
+            <span
+              style="color: red; cursor: pointer"
+              @click="$store.commit('DELETE_ROW', item.rowId)"
               >삭제</span
             >&nbsp;&nbsp;
             <span
@@ -65,10 +99,8 @@
       </tbody>
     </table>
     <Popup
-      :selectedId="selectedId"
       :txtBefore="txtBefore"
-      :isMultiSelect="isMultiSelect"
-      @updateAll="updateAll"
+      :selectedId="selectedId"
     ></Popup>
   </div>
 </template>
@@ -79,21 +111,11 @@ export default {
   data() {
     return {
       selectedId: 0,
-      isMultiSelect: this.isUpdatedAll,
       txtBefore: "",
-      selected: [],
     };
   },
-  props: ["isUpdatedAll"],
 
   methods: {
-    deleteRow(id) {
-      this.$store.commit("DELETE_ROW", id);
-    },
-    // 선택된 항목 배열에 담기
-    selectItem() {
-      this.$emit("selectItem", this.selected);
-    },
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
       this.selectedId = id;
@@ -101,30 +123,17 @@ export default {
         (a) => a.rowId == this.selectedId
       ).contents;
 
-      this.$emit("clickUpdateBtn");
-    },
-    // 완료여부 체크에 따른 행 색상 변경
-    checkComplete(id) {
-      for (let i = 0; i < this.list.length; i++) {
-        this.list.find((a) => a.rowId == id).complete =
-          this.list.find((a) => a.rowId == id).complete == "N" ? "Y" : "N";
-      }
+      this.$store.dispatch('clickUpdateBtn', this.selectedId);
     },
   },
   computed: {
     // 체크박스 전체 선택 및 전체 해제
     selectAll: {
       get() {
-        return this.$store.state.list.length === this.selected.length;
+        return this.$store.state.list.length === this.$store.state.selected.length;
       },
       set(e) {
-        this.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
-        this.$emit("selectItem", this.selected);
-      },
-    },
-    mount: {
-      nowLength: function () {
-        return this.$store.state.list.filter((a) => a.rowId);
+        this.$store.state.selected = e ? this.$store.state.list.map((a) => a.rowId) : [];
       },
     },
   },

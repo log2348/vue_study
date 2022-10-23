@@ -13,7 +13,50 @@
         </tr>
       </thead>
 
-      <tbody id="table-body">
+      <tbody id="table-body" v-if="isFiltered">
+        <tr
+          :style="item.complete == 'Y' ? 'background-color: pink' : ''"
+          align="center"
+          v-for="item in filteredList"
+          :key="item.rowId"
+        >
+          <th>
+            <input
+              type="checkbox"
+              :value="item.rowId"
+              v-model="selected"
+              @change="$emit('selectItem', selected)"
+            />
+          </th>
+          <td>{{ item.date }}</td>
+          <td>{{ item.contents }}</td>
+          <td>
+            <input
+              type="checkbox"
+              v-if="item.complete == 'Y'"
+              @change="checkComplete(item.rowId)"
+              checked
+            />
+            <input type="checkbox" @change="checkComplete(item.rowId)" v-else />
+          </td>
+          <td>
+            <input type="hidden" id="row-id" :value="item.rowId" />
+            <span
+              style="color: red; cursor: pointer"
+              @click="$emit('deleteRow', item.rowId)"
+              >삭제</span
+            >&nbsp;&nbsp;
+            <span
+              style="color: blue; cursor: pointer"
+              v-b-modal.modal-1
+              @click="clickUpdateBtn(item.rowId)"
+              >수정</span
+            >
+          </td>
+        </tr>
+      </tbody>
+
+      <tbody id="table-body" v-if="!isFiltered">
         <tr
           :style="item.complete == 'Y' ? 'background-color: pink' : ''"
           align="center"
@@ -77,7 +120,7 @@ export default {
       selected: [],
     };
   },
-  props: ["list", "showModal", "isUpdatedAll"],
+  props: ["list", "filteredList", "showModal", "isUpdatedAll", "isFiltered"],
   methods: {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
