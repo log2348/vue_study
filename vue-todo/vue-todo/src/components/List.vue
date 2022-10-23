@@ -8,7 +8,7 @@
           </td>
           <th>날짜</th>
           <th>내용</th>
-          <!-- <th>완료여부</th> -->
+          <th>완료여부</th>
           <th></th>
         </tr>
       </thead>
@@ -19,7 +19,6 @@
           align="center"
           v-for="item in list"
           :key="item.rowId"
-          @click="checkComplete(item.rowId)"
         >
           <th>
             <input
@@ -31,15 +30,15 @@
           </th>
           <td>{{ item.date }}</td>
           <td>{{ item.contents }}</td>
-          <!-- <td>
+          <td>
             <input
               type="checkbox"
-              v-model="complete"
               v-if="item.complete == 'Y'"
+              @change="checkComplete(item.rowId)"
               checked
             />
-            <input type="checkbox" v-model="complete" v-else />
-          </td> -->
+            <input type="checkbox" @change="checkComplete(item.rowId)" v-else />
+          </td>
           <td>
             <input type="hidden" id="row-id" :value="item.rowId" />
             <span
@@ -61,7 +60,7 @@
       :selectedId="selectedId"
       :txtBefore="txtBefore"
       :showModal="showModal"
-      :isMultiSelect="isMultiSelect"
+      :isUpdatedAll="isUpdatedAll"
       @updateRow="updateRow"
       @updateAll="updateAll"
     ></Popup>
@@ -73,14 +72,12 @@ import Popup from "../components/Popup.vue";
 export default {
   data() {
     return {
-      complete: "",
       selectedId: 0,
-      isMultiSelect: this.isUpdatedAll,
       txtBefore: "",
       selected: [],
     };
   },
-  props: ["list", "isUpdatedAll", "showModal"],
+  props: ["list", "showModal", "isUpdatedAll"],
   methods: {
     // 단건 수정 버튼 클릭
     clickUpdateBtn(id) {
@@ -115,11 +112,6 @@ export default {
       set(e) {
         this.selected = e ? this.list.map((a) => a.rowId) : [];
         this.$emit("selectItem", this.selected);
-      },
-    },
-    mount: {
-      nowLength: function () {
-        return this.list.filter((a) => a.rowId);
       },
     },
   },

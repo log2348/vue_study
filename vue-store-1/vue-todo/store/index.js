@@ -5,9 +5,10 @@ import axios from "axios";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  // 컴포넌트 간에 공유할 data
   state() {
-    // 컴포넌트 간에 공유할 data
     return {
+      showModal: false,
       list: [
         {
           rowId: 1,

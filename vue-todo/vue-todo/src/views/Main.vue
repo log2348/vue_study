@@ -9,8 +9,8 @@
     <List
       :list="list"
       :dateList="dateList"
-      :isUpdatedAll="isUpdatedAll"
       :showModal="showModal"
+      :isUpdatedAll="isUpdatedAll"
       @updateAll="updateAll"
       @deleteRow="deleteRow"
       @updateRow="updateRow"
@@ -21,8 +21,6 @@
       :list="list"
       :selected="selected"
       :completed="completed"
-      :showModal="showModal"
-      :isUpdatedAll="isUpdatedAll"
       @initData="initData"
       @getData="getData"
       @clickUpdateAllBtn="clickUpdateAllBtn"
@@ -42,8 +40,8 @@ export default {
     return {
       completed: [],
       selected: [],
-      showModal: false,
       isUpdatedAll: false,
+      showModal: false,
       list: [
         {
           rowId: 1,

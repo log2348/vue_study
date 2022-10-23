@@ -4,7 +4,12 @@
       <div style="padding: 10px">
         <label><b>수정 전</b></label
         >&nbsp;&nbsp;
-        <input type="text" id="before-update-text" v-model="before" />
+        <input
+          type="text"
+          id="before-update-text"
+          v-model="before"
+          :disabled="!isUpdatedAll"
+        />
       </div>
       <div style="padding: 10px">
         <label><b>수정 후</b></label
@@ -13,10 +18,20 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" @click="updateRow">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="updateRow"
+          v-if="!isUpdatedAll"
+        >
           수정
         </button>
-        <button type="button" class="btn btn-primary" @click="updateAll">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="updateAll"
+          v-if="isUpdatedAll"
+        >
           일괄 수정
         </button>
       </div>
@@ -32,7 +47,13 @@ export default {
       after: "",
     };
   },
-  props: ["selectedId", "txtBefore", "isMultiSelect", "showModal"],
+  props: [
+    "selectedId",
+    "txtBefore",
+    "isMultiSelect",
+    "showModal",
+    "isUpdatedAll",
+  ],
   methods: {
     // 단건 수정
     updateRow() {
@@ -47,7 +68,11 @@ export default {
     setModal() {
       this.before = "";
       this.after = "";
-      this.before = this.txtBefore;
+
+      // 단건 수정일 경우에만 수정 전 값 세팅
+      if (!this.isUpdatedAll) {
+        this.before = this.txtBefore;
+      }
     },
   },
 };

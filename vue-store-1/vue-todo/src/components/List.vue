@@ -35,12 +35,11 @@
           <td>
             <input
               type="checkbox"
-              v-model="complete"
               v-if="item.complete == 'Y'"
               @click="checkComplete(item.rowId)"
               checked
             />
-            <input type="checkbox" v-model="complete" v-else />
+            <input type="checkbox" @click="checkComplete(item.rowId)" v-else />
           </td>
           <td></td>
           <td>
